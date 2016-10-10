@@ -13,7 +13,7 @@ sit   =	350,380
 jump_up=400,530
 jump_do=349,448
 
-walk  = 280,450
+walk  = 300,450
 run   = 420,400
 stoprun=400,420
 hit   = 400,420
