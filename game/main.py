@@ -77,7 +77,10 @@ while running:
             player.frame=0
             frame =0
         elif frame<5 and (Rdouble== True or Ldouble==True):
-            pass
+            player.state = 4
+            player.frame = 0
+            next=0
+            frame=0
     elif player.state ==2 and frame==5:
         if next == 0:
             player.state = 0
@@ -107,6 +110,12 @@ while running:
         player.frame = 0
         frame=0
         next=0
+    elif player.state == 4:
+        if frame==18:
+            player.state=0
+            player.frame = 0
+            frame=0
+            next=0
     player.update()
     frame +=1
     clear_canvas()

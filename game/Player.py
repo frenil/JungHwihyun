@@ -22,6 +22,8 @@ class Ragna:
         self.Rnomco2 = load_image('resource/Rnomco2.png')
         self.nomco3 = load_image('resource/nomco3.png')
         self.Rnomco3 = load_image('resource/Rnomco3.png')
+        self.dash = load_image('resource/dash1.png')
+        self.Rdash = load_image('resource/Rdash1.png')
 
     def update(self):
         if self.state ==0 :
@@ -40,6 +42,10 @@ class Ragna:
             if self.walkframe == 1:
                 self.frame = (self.frame + 1)%9
             self.x += self.see*10
+        elif self.state ==4:
+            self.frame = (self.frame+1)%19
+            if self.frame>4 and self.frame < 11:
+                self.x += self.see*60
     def draw(self):
         if self.see == -1:
             if self.state == 0:
@@ -70,6 +76,13 @@ class Ragna:
                                                     250)
             elif self.state == 3:
                 self.Lwalk.clip_draw_to_origin(self.frame * 300, 0, 300, 450, self.x, self.y, 150, 225)
+            elif self.state == 4:
+                if self.frame < 9:
+                    self.dash.clip_draw_to_origin(self.frame * 800, 500 ,800, 500, self.x-200,self.y , 400, 250)
+                else :
+                    self.dash.clip_draw_to_origin((self.frame-9) * 800, 0, 800, 500, self.x-200, self.y, 400, 250)
+
+
         elif self.see ==1:
             if self.state == 0:
                 if self.frame < 7:
@@ -98,9 +111,14 @@ class Ragna:
                                                     250)
                 else:
                     self.Rnomco3.clip_draw_to_origin((self.frame - 14) * 1100, 0, 1100, 490, self.x -90, self.y, 550,
-                                                    250)
+                                                        250)
             elif self.state == 3:
                 self.Rwalk.clip_draw_to_origin(self.frame * 300, 0, 300, 450, self.x, self.y, 150, 225)
+            elif self.state == 4:
+                if self.frame < 9:
+                    self.Rdash.clip_draw_to_origin(self.frame * 800, 500 ,800, 500, self.x-60,self.y , 400, 250)
+                else :
+                    self.Rdash.clip_draw_to_origin((self.frame-9) * 800, 0, 800, 500, self.x-60, self.y, 400, 250)
 
 
 
