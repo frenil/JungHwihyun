@@ -1,12 +1,10 @@
 from pico2d import *
 import Player
-
+WW,WH = 1200, 800
 def handle_events():
     global running
     global next
     global Ldown, Rdown
-    global see
-    global Ldouble,Rdouble
     global LKeyco, RKeyco
     events = get_events()
     for event in events:
@@ -16,108 +14,53 @@ def handle_events():
             if event.key == SDLK_ESCAPE:
                 running = False
             elif event.key == SDLK_a :
-                next = 1
+                player.next = 1
             if event.key == SDLK_LEFT:
-                Ldown = True
-                see = -1
+                player.Ldown = True
+                if player.state == 0 or player.state == 3:
+                    player.see = -1
                 if LKeyco < 5:
-                    Ldouble = True
+                    player.Ldouble = True
             if event.key == SDLK_RIGHT:
-                Rdown = True
-                see = 1
+                player.Rdown = True
+                if player.state == 0 or player.state == 3:
+                    player.see = 1
                 if RKeyco < 5:
-                    Rdouble = True
+                    player.Rdouble = True
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_LEFT:
-                Ldown = False
-                if Rdown == True:
-                    see = 1
-                if Ldouble == True:
-                    LKeyco =0
+                player.Ldown = False
+                LKeyco =0
             if event.key== SDLK_RIGHT:
-                Rdown = False
-                if Ldown == True:
-                    see = -1
-                if Rdouble == True:
-                    RKeyco =0
+                player.Rdown = False
+                RKeyco =0
 
-open_canvas(1800,800)
+def main_update():
+    global next, see
+    global LKeyco, RKeyco
+    global Rdouble,Ldouble
+    LKeyco = LKeyco + 1
+    RKeyco = RKeyco + 1
+
+open_canvas(WW,WH)
 
 player = Player.Ragna()
 state =0
 running = True
 stcount = 0
-next = 0
-frame=0
-see =1
 LKeyco , RKeyco = 0 , 0
 Ldouble, Rdouble = False, False
 Ldown, Rdown = False, False
 walking =False
 while running:
     handle_events()
-    player.see = see
-    if Ldown == False and Rdown == False:
-        walking = False
-    if player.state == 0 :
-        if Ldown == True or Rdown == True:
-            walking = True
-        if next==0 and walking == True:
-            player.state = 3
-            player.see = see
-        elif next == 1:
-            player.state = 2
-            next = 0
-            player.frame = 0
-            frame = 0
-    elif player.state == 3 :
-        if walking == False:
-            player.walkframe =0
-            player.state =0
-            player.frame=0
-            frame =0
-        elif frame<5 and (Rdouble== True or Ldouble==True):
-            player.state = 4
-            player.frame = 0
-            next=0
-            frame=0
-    elif player.state ==2 and frame==5:
-        if next == 0:
-            player.state = 0
-        elif next == 1 :
-            player.state = 211
-        next = 0
-        player.frame = 0
-        frame=0
-    elif player.state ==211and frame == 17:
-        if next == 0:
-            player.state = 0
-        elif next == 1 :
-            player.state = 212
-        player.frame = 0
-        next = 0
-        frame=0
-    elif player.state ==212 and frame ==16:
-        if next == 0:
-            player.state = 0
-        elif next == 1:
-            player.state = 213
-        player.frame = 0
-        frame=0
-        next=0
-    elif  player.state == 213and frame ==20:
-        player.state=0
-        player.frame = 0
-        frame=0
-        next=0
-    elif player.state == 4:
-        if frame==18:
-            player.state=0
-            player.frame = 0
-            frame=0
-            next=0
+
+    main_update()
     player.update()
-    frame +=1
+    if player.x<40:
+        player.x = 40
+    elif player.x>WW-200:
+        player.x = WW-200
     clear_canvas()
 
     player.draw()

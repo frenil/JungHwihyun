@@ -3,11 +3,15 @@ from pico2d import *
 class Ragna:
     def __init__(self):
         self.x,self.y = 900,150
+        self.Ldown,self.Rdown = False,False
+        self.Ldouble, self.Rdouble = False, False
         self.frame =0
         self.state =0
         self.st2co=0
         self.stcount =0
-        self.see = 0
+        self.see = 1
+        self.next =0
+        self.walking = False
         self.walkframe= 0
         self.Lwalk = load_image('resource/Lwalk.png')
         self.Rwalk = load_image('resource/Rwalk.png')
@@ -24,28 +28,93 @@ class Ragna:
         self.Rnomco3 = load_image('resource/Rnomco3.png')
         self.dash = load_image('resource/dash1.png')
         self.Rdash = load_image('resource/Rdash1.png')
+        self.dash2 = load_image('resource/dash2.png')
+        self.Rdash2 = load_image('resource/Rdash2.png')
 
     def update(self):
+        if (self.Rdown, self.Ldown) == (False,False):
+            self.walking =False
         if self.state ==0 :
             self.frame = (self.frame+1)%13
             self.stcount+=1
+            if self.Rdown == True and (self.state == 0 or self.state == 3):
+                self.see = 1
+            if self.Ldown == True and (self.state == 0 or self.state == 3):
+                self.see = -1
+            if self.Ldown == True or self.Rdown == True:
+                self.walking = True
+            if self.next == 0 and self.walking == True:
+                self.state = 3
+            elif self.next == 1:
+                self.state = 2
+                self.next = 0
+                self.frame = 0
         elif self.state == 2:
             self.frame = self.frame+1
+            if self.frame == 5:
+                if self.next == 0:
+                    self.state = 0
+                elif self.next == 1:
+                    self.state = 211
+                self.next = 0
+                self.frame = 0
         elif self.state == 211:
-            self.frame = (self.frame+1)%17
+            self.frame = self.frame+1
+            if self.frame == 16:
+                if self.next == 0:
+                    self.state = 0
+                elif self.next == 1:
+                    self.state = 212
+                self.frame = 0
+                self.next = 0
         elif self.state == 212:
             self.frame = (self.frame+1)%17
+            if self.frame ==16:
+                if self.next == 0:
+                    self.state = 0
+                elif self.next == 1:
+                    self.state = 213
+                self.frame = 0
+                self.next=0
         elif self.state == 213:
             self.frame = (self.frame + 1) % 21
+            if self.frame ==20:
+                self.state = 0
+                self.frame = 0
+                self.next = 0
         elif self.state == 3 :
             self.walkframe =(self.walkframe+1)%2
             if self.walkframe == 1:
                 self.frame = (self.frame + 1)%9
             self.x += self.see*10
+            if self.walking == False:
+                self.walkframe = 0
+                self.state = 0
+                self.frame = 0
+            elif self.Rdouble == True or self.Ldouble == True:
+                self.state = 4
+                self.frame = 0
+                self.next = 0
         elif self.state ==4:
             self.frame = (self.frame+1)%19
             if self.frame>4 and self.frame < 11:
                 self.x += self.see*60
+            if self.frame == 12 and self.next == 1:
+                self.state = 41
+                self.frame = 0
+                self.next = 0
+            elif self.frame == 17:
+                self.state = 0
+                self.frame = 0
+                self.next = 0
+                self.Rdouble = False
+                self.Ldouble = False
+        elif self.state == 41:
+            self.frame = self.frame+1
+            if self.frame == 16:
+                self.state = 0
+                self.frame = 0
+                self.next = 0
     def draw(self):
         if self.see == -1:
             if self.state == 0:
@@ -81,6 +150,13 @@ class Ragna:
                     self.dash.clip_draw_to_origin(self.frame * 800, 500 ,800, 500, self.x-200,self.y , 400, 250)
                 else :
                     self.dash.clip_draw_to_origin((self.frame-9) * 800, 0, 800, 500, self.x-200, self.y, 400, 250)
+            elif self.state == 41:
+                if self.frame<5:
+                    self.dash2.clip_draw_to_origin(self.frame * 1000, 1040, 1000, 520, self.x-330, self.y-20, 500, 260)
+                elif self.frame<11:
+                    self.dash2.clip_draw_to_origin((self.frame-5) * 1000, 520, 1000, 520, self.x-330, self.y-20, 500, 260)
+                else:
+                    self.dash2.clip_draw_to_origin((self.frame-11) * 1000, 0, 1000, 520, self.x-330, self.y-20, 500, 260)
 
 
         elif self.see ==1:
@@ -119,6 +195,13 @@ class Ragna:
                     self.Rdash.clip_draw_to_origin(self.frame * 800, 500 ,800, 500, self.x-60,self.y , 400, 250)
                 else :
                     self.Rdash.clip_draw_to_origin((self.frame-9) * 800, 0, 800, 500, self.x-60, self.y, 400, 250)
+            elif self.state == 41:
+                if self.frame<5:
+                    self.Rdash2.clip_draw_to_origin(self.frame * 1000, 1040, 1000, 520, self.x-30, self.y-20, 500, 260)
+                elif self.frame<11:
+                    self.Rdash2.clip_draw_to_origin((self.frame-5) * 1000, 520, 1000, 520, self.x-30, self.y-20, 500, 260)
+                else:
+                    self.Rdash2.clip_draw_to_origin((self.frame-11) * 1000, 0, 1000, 520, self.x-30, self.y-20, 500, 260)
 
 
 
