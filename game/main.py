@@ -5,7 +5,6 @@ def handle_events():
     global running
     global next
     global Ldown, Rdown
-    global LKeyco, RKeyco
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -57,10 +56,7 @@ while running:
 
     main_update()
     player.update()
-    if player.x<40:
-        player.x = 40
-    elif player.x>WW-200:
-        player.x = WW-200
+
     clear_canvas()
 
     player.draw()

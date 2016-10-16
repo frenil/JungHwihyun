@@ -11,7 +11,7 @@ stand =	350,450
 stand2= 350,350
 sit   =	350,380
 jump_up=400,530
-jump_do=349,448
+jump_do=400,448
 
 walk  = 300,450
 run   = 420,400
