@@ -13,8 +13,6 @@ def enter():
     global WH
     WW, WH = 1280, 720
 
-    open_canvas(WW,WH)
-    image = load_image('title.png')
 
 def exit():
     global  image
@@ -33,13 +31,7 @@ def update():
 
 
 def draw():
-    global image
-    global WW
-    global WH
-    clear_canvas()
-    image.draw(640,360)
-    update_canvas()
-
+    pass
 
 
 def handle_events():
