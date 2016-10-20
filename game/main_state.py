@@ -88,8 +88,10 @@ def handle_events():
 
 def update():
     global LKeyco, RKeyco
-    LKeyco = LKeyco + 1
-    RKeyco = RKeyco + 1
+    if player.Ldown == False:
+        LKeyco = LKeyco + 1
+    if player.Rdown == False:
+        RKeyco = RKeyco + 1
 
     player.update()
 

@@ -74,7 +74,7 @@ class Ragna:
                 self.frame = 0
                 self.next=0
         elif self.state == 213:
-            self.frame = (self.frame + 1) % 21
+            self.frame = self.frame + 1
             if self.frame ==20:
                 self.state = 0
                 self.frame = 0
@@ -96,6 +96,8 @@ class Ragna:
                 self.state = 4
                 self.frame = 0
                 self.next = 0
+                self.Rdouble=False
+                self.Ldouble = False
         elif self.state ==4:
             self.frame = (self.frame+1)%19
             if self.frame>4 and self.frame < 11:
