@@ -4,7 +4,16 @@ rag = None
 
 def Loading():
     global rag
+    global dall
     rag = Ragna_image()
+    dall = Dall_image()
+class Dall_image:
+    def __init__(self):
+        self.Lstand = load_image('resource/dallstand.png')
+        self.Rstand = load_image('resource/Rdallstand.png')
+        self.Lhit = load_image('resource/dallhit.png')
+        self.Rhit = load_image('resource/Rdallhit.png')
+
 
 class Ragna_image:
     def __init__(self):

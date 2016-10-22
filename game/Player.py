@@ -3,7 +3,7 @@ import LoadRe
 
 class Ragna:
     def __init__(self):
-        self.x,self.y = 900,50
+        self.x,self.y = 300,50
         self.Ldown,self.Rdown = False,False
         self.Ldouble, self.Rdouble = False, False
         self.jumpdo = False
@@ -11,11 +11,105 @@ class Ragna:
         self.state =0
         self.st2co=0
         self.stcount =0
+        self.Gjump=80
         self.see = 1
         self.next =0
         self.walking = False
         self.walkframe= 0
 
+    def get_Rect(self):
+        if self.see == 1:
+            if self.state == 2 and self.frame == 2:
+                draw_rectangle(self.x+100,self.y+50, self.x+210,self.y+200)
+            elif self.state == 211 and self.frame == 9:
+                draw_rectangle(self.x+150,self.y+50, self.x+300,self.y+200)
+            elif self.state == 212 and self.frame == 7:
+                draw_rectangle(self.x+200,self.y, self.x+400,self.y+200)
+            elif self.state == 213 and self.frame>= 8and self.frame<=11:
+                draw_rectangle(self.x+100,self.y, self.x+420,self.y+200)
+            elif self.state == 4 and self.frame >= 6 and self.frame <= 7:
+                draw_rectangle(self.x , self.y, self.x + 300, self.y + 200)
+            elif self.state == 41 and self.frame >= 8 and self.frame <= 12:
+                draw_rectangle(self.x + 100, self.y, self.x + 440, self.y + 230)
+            elif self.state == 82 and self.frame >=6and self.frame<=14:
+                draw_rectangle(self.x+130,self.y+50, self.x+260+(self.frame*5),self.y+50+(self.frame*15))
+            elif self.state ==822 and self.frame == 7:
+                draw_rectangle(self.x+130,self.y+50, self.x+250,self.y+250)
+            elif self.state == 823 and self.frame == 6:
+                draw_rectangle(self.x+70,self.y, self.x+250,self.y+200)
+            elif self.state == 824 and self.frame == 6:
+                draw_rectangle(self.x+70,self.y, self.x+250,self.y+200)
+
+
+        elif self.see == -1:
+            if self.state == 2 and self.frame == 2:
+                draw_rectangle(self.x-80,self.y+50, self.x+30,self.y+200)
+            elif self.state == 211 and self.frame == 9:
+                draw_rectangle(self.x-150,self.y+50, self.x,self.y+200)
+            elif self.state == 212 and self.frame == 7:
+                draw_rectangle(self.x-270,self.y+50, self.x-70,self.y+200)
+            elif self.state == 213 and self.frame >= 8 and self.frame <= 11:
+                draw_rectangle(self.x - 290, self.y, self.x + 30, self.y + 200)
+            elif self.state == 4 and self.frame >= 6 and self.frame <= 7:
+                draw_rectangle(self.x -190, self.y, self.x + 110, self.y + 200)
+            elif self.state == 41 and self.frame >= 8 and self.frame <= 12:
+                draw_rectangle(self.x-310,self.y, self.x+30,self.y+230)
+            elif self.state == 82 and self.frame >= 6 and self.frame <= 14:
+                draw_rectangle(self.x-80-(self.frame*5),self.y+50, self.x+50,self.y+50+(self.frame*15))
+            elif self.state ==822 and self.frame == 7:
+                draw_rectangle(self.x-80,self.y+50, self.x+40,self.y+250)
+            elif self.state == 823 and self.frame == 6:
+                draw_rectangle(self.x-50,self.y+50, self.x+130,self.y+200)
+            elif self.state == 824 and self.frame == 6:
+                draw_rectangle(self.x-50,self.y, self.x+130,self.y+150)
+
+
+
+
+    def get_bb(self):
+        if self.see == 1:
+            if self.state == 2 and self.frame == 2:
+                return(self.x + 100, self.y + 100, self.x + 210, self.y + 200)
+            elif self.state == 211 and self.frame == 9:
+                return (self.x+150,self.y+50, self.x+290,self.y+200)
+            elif self.state == 212 and self.frame == 7:
+                return (self.x+200,self.y, self.x+400,self.y+200)
+            elif self.state == 213 and self.frame>= 8 and self.frame<=11:
+                return (self.x+100,self.y, self.x+420,self.y+200)
+            elif self.state == 4 and self.frame >= 6 and self.frame <= 7:
+                return (self.x , self.y, self.x + 300, self.y + 200)
+            elif self.state == 41 and self.frame >= 8 and self.frame <= 12:
+                return (self.x + 100, self.y, self.x + 440, self.y + 230)
+            elif self.state == 82 and self.frame >=6and self.frame<=14:
+                return(self.x+130,self.y+50, self.x+260+(self.frame*5),self.y+50+(self.frame*15))
+            elif self.state ==822 and self.frame == 7:
+                return(self.x+130,self.y+50, self.x+250,self.y+250)
+            elif self.state == 823 and self.frame == 6:
+                return(self.x+70,self.y, self.x+250,self.y+200)
+            elif self.state == 824 and self.frame == 6:
+                return(self.x+70,self.y, self.x+250,self.y+200)
+        elif self.see == -1:
+            if self.state == 2 and self.frame == 2:
+                return(self.x - 80, self.y + 100, self.x + 30, self.y + 200)
+            elif self.state == 211 and self.frame == 9:
+                return (self.x - 140, self.y + 50, self.x, self.y + 200)
+            elif self.state == 212 and self.frame == 7:
+                return (self.x-270,self.y+50, self.x-70,self.y+200)
+            elif self.state == 213 and self.frame >= 8 and self.frame <= 11:
+                return (self.x-290,self.y, self.x+30,self.y+200)
+            elif self.state == 4 and self.frame >= 6 and self.frame <= 7:
+                return (self.x -190, self.y, self.x + 110, self.y + 200)
+            elif self.state == 41 and self.frame >= 8 and self.frame <= 12:
+                return (self.x-310,self.y, self.x+30,self.y+230)
+            elif self.state == 82 and self.frame >= 6 and self.frame <= 14:
+                return(self.x-80-(self.frame*5),self.y+50, self.x+50,self.y+50+(self.frame*15))
+            elif self.state ==822 and self.frame == 7:
+                return(self.x-80,self.y+50, self.x+40,self.y+250)
+            elif self.state == 823 and self.frame == 6:
+                return(self.x-270,self.y+50, self.x-70,self.y+200)
+            elif self.state == 824 and self.frame == 6:
+                return(self.x-50,self.y, self.x+130,self.y+150)
+        return(0,0,0,0)
     def update(self):
         if self.x < 40:
             self.x = 40
@@ -43,6 +137,7 @@ class Ragna:
                 self.state = 8
                 self.next = 0
                 self.frame =0
+                self.Gjump=80
         elif self.state == 2:
             self.frame = self.frame+1
             if self.frame == 5:
@@ -84,6 +179,8 @@ class Ragna:
                 self.state = 8
                 self.next = 0
                 self.frame =0
+                self.Gjump=80
+
             self.walkframe =(self.walkframe+1)%2
             if self.walkframe == 1:
                 self.frame = (self.frame + 1)%9
@@ -120,14 +217,15 @@ class Ragna:
                 self.next = 0
         elif self.state == 8:
             self.frame = self.frame+1
+            self.Gjump -= 10
             if self.next==1 and self.jumpdo==False:
                 self.state=822
                 self.frame=0
                 self.next=0
             if self.frame<10:
-                self.y += 30
+                self.y += self.Gjump
             else:
-                self.y-=30
+                self.y+=self.Gjump
             if self.y<=50:
                 self.y=50
                 self.state = 81
@@ -150,6 +248,7 @@ class Ragna:
                 if self.next==0:
                     self.frame = 80
                     self.state =8
+                    self.Gjump=0
                 elif  self.next==1:
                     self.frame =0
                     self.state = 822
@@ -162,6 +261,8 @@ class Ragna:
                 if self.next==0:
                     self.frame=90
                     self.state=8
+                    self.Gjump=0
+
                 elif self.next==1:
                     self.frame=0
                     self.state=823
@@ -175,12 +276,14 @@ class Ragna:
                 else:
                     self.frame=90
                     self.state=8
+                    self.Gjump=0
+
         elif self.state == 824:
             if self.frame<6 or self.frame>6:
                 self.frame = self.frame+1
             else:
                 self.x += self.see*15
-                self.y -= 50
+                self.y -= 60
             if self.y<=50:
                 self.frame+=1
                 self.y=50
