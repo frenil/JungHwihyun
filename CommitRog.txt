@@ -1,1 +1,1 @@
-10-27: dall의 공격 모션 리소스 추가, Ragna()의 state 이름 수정
+10-27: dall의 공격 모션 리소스 추가, Ragna()의 state 이름 수정 
