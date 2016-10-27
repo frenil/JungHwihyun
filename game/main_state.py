@@ -122,7 +122,7 @@ def update():
             dall.Yhit=15
         dall.see = player.see* -1
         dall.ishit =True
-    delay(0.04)
+    delay(0.1)
 
 def collide(player,dall):
     left_a, bottom_a, right_a, top_a = player.get_bb()

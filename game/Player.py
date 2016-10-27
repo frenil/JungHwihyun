@@ -2,6 +2,7 @@ from pico2d import *
 import LoadRe
 
 class Ragna:
+    STAND, WALK, JUMP_UP, JUMP_DOWN = 0, 3, 8 , 81
     def __init__(self):
         self.x,self.y = 300,50
         self.Ldown,self.Rdown = False,False
@@ -63,9 +64,6 @@ class Ragna:
             elif self.state == 824 and self.frame == 6:
                 draw_rectangle(self.x-50,self.y, self.x+130,self.y+150)
 
-
-
-
     def get_bb(self):
         if self.see == 1:
             if self.state == 2 and self.frame == 2:
@@ -121,20 +119,20 @@ class Ragna:
             self.see = 1
         if self.Ldown == True and (self.state == 0 or self.state == 3or self.state == 8):
             self.see = -1
-        if self.state ==0 :
+        if self.state == self.STAND :
             self.frame = (self.frame+1)%13
             self.stcount+=1
 
             if self.Ldown == True or self.Rdown == True:
                 self.walking = True
             if self.next == 0 and self.walking == True:
-                self.state = 3
+                self.state = self.WALK
             elif self.next == 1:
                 self.state = 2
                 self.next = 0
                 self.frame = 0
             elif self.next == 8:
-                self.state = 8
+                self.state = self.JUMP_UP
                 self.next = 0
                 self.frame =0
                 self.Gjump=80
@@ -174,9 +172,9 @@ class Ragna:
                 self.state = 0
                 self.frame = 0
                 self.next = 0
-        elif self.state == 3 :
+        elif self.state == self.WALK :
             if self.next == 8:
-                self.state = 8
+                self.state = self.JUMP_UP
                 self.next = 0
                 self.frame =0
                 self.Gjump=80
@@ -187,7 +185,7 @@ class Ragna:
             self.x += self.see*10
             if self.walking == False:
                 self.walkframe = 0
-                self.state = 0
+                self.state = self.STAND
                 self.frame = 0
             elif self.Rdouble == True or self.Ldouble == True:
                 self.state = 4
@@ -204,7 +202,7 @@ class Ragna:
                 self.frame = 0
                 self.next = 0
             elif self.frame == 17:
-                self.state = 0
+                self.state = self.STAND
                 self.frame = 0
                 self.next = 0
                 self.Rdouble = False
@@ -212,10 +210,10 @@ class Ragna:
         elif self.state == 41:
             self.frame = self.frame+1
             if self.frame == 16:
-                self.state = 0
+                self.state = self.STAND
                 self.frame = 0
                 self.next = 0
-        elif self.state == 8:
+        elif self.state == self.JUMP_UP:
             self.frame = self.frame+1
             self.Gjump -= 10
             if self.next==1 and self.jumpdo==False:
@@ -228,16 +226,16 @@ class Ragna:
                 self.y+=self.Gjump
             if self.y<=50:
                 self.y=50
-                self.state = 81
+                self.state = self.JUMP_DOWN
                 self.frame=0
                 self.next=0
                 self.jumpdo=False
             if self.Ldown== True or self.Rdown == True:
                 self.x += self.see*10
-        elif self.state == 81:
+        elif self.state == self.JUMP_DOWN:
             self.frame +=1
             if self.frame>4:
-                self.state=0
+                self.state=self.STAND
                 self.frame=0
         elif self.state == 82:
             self.frame = self.frame+1
@@ -260,7 +258,7 @@ class Ragna:
             if self.frame>11:
                 if self.next==0:
                     self.frame=90
-                    self.state=8
+                    self.state=self.JUMP_UP
                     self.Gjump=0
 
                 elif self.next==1:
@@ -275,7 +273,7 @@ class Ragna:
                     self.state=824
                 else:
                     self.frame=90
-                    self.state=8
+                    self.state=self.JUMP_UP
                     self.Gjump=0
 
         elif self.state == 824:
@@ -288,7 +286,7 @@ class Ragna:
                 self.frame+=1
                 self.y=50
             if self.frame>10:
-                self.state=0
+                self.state=self.STAND
                 self.frame=0
                 self.next=0
     def draw(self):
