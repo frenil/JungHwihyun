@@ -2,7 +2,11 @@ from pico2d import *
 import LoadRe
 
 class Ragna:
-    STAND, WALK, JUMP_UP, JUMP_DOWN = 0, 3, 8 , 81
+    PIXEL_PER_METER = (10.0/ 0.3)
+
+    STAND,WALK, DASH, DASHCOM  = 0, 3,4,41
+    PUNCH, NOMCO1, NOMCO2, NOMCO3 = 2,211,212,213
+    JUMP_UP, JUMP_DOWN, UPPER, JUMPCOM1, JUMPCOM2, JUMPCOM3= 8 , 81, 82,822,823,824
     def __init__(self):
         self.x,self.y = 300,50
         self.Ldown,self.Rdown = False,False
@@ -128,7 +132,7 @@ class Ragna:
             if self.next == 0 and self.walking == True:
                 self.state = self.WALK
             elif self.next == 1:
-                self.state = 2
+                self.state = self.PUNCH
                 self.next = 0
                 self.frame = 0
             elif self.next == 8:
@@ -136,40 +140,40 @@ class Ragna:
                 self.next = 0
                 self.frame =0
                 self.Gjump=80
-        elif self.state == 2:
+        elif self.state == self.PUNCH:
             self.frame = self.frame+1
             if self.frame == 5:
                 if self.next == 0:
                     self.state = 0
                 elif self.next == 1:
-                    self.state = 211
+                    self.state = self.NOMCO1
                 elif self.next == 8:
-                    self.state = 82
+                    self.state = self.UPPER
                 self.next = 0
                 self.frame = 0
-        elif self.state == 211:
+        elif self.state == self.NOMCO1:
             self.frame = self.frame+1
             if self.frame == 16:
                if self.next == 1:
-                    self.state = 212
+                    self.state =self.NOMCO2
                else:
-                    self.state = 0
+                    self.state = self.STAND
 
                self.frame = 0
                self.next = 0
-        elif self.state == 212:
+        elif self.state == self.NOMCO2:
             self.frame = (self.frame+1)%17
             if self.frame ==16:
                 if self.next == 1:
-                    self.state = 213
+                    self.state = self.NOMCO3
                 else:
-                    self.state=0
+                    self.state=self.STAND
                 self.frame = 0
                 self.next=0
-        elif self.state == 213:
+        elif self.state ==self.NOMCO3:
             self.frame = self.frame + 1
             if self.frame ==20:
-                self.state = 0
+                self.state = self.STAND
                 self.frame = 0
                 self.next = 0
         elif self.state == self.WALK :
@@ -188,17 +192,17 @@ class Ragna:
                 self.state = self.STAND
                 self.frame = 0
             elif self.Rdouble == True or self.Ldouble == True:
-                self.state = 4
+                self.state = self.DASH
                 self.frame = 0
                 self.next = 0
                 self.Rdouble=False
                 self.Ldouble = False
-        elif self.state ==4:
+        elif self.state ==self.DASH:
             self.frame = (self.frame+1)%19
             if self.frame>4 and self.frame < 11:
                 self.x += self.see*60
             if self.frame == 12 and self.next == 1:
-                self.state = 41
+                self.state = self.DASHCOM
                 self.frame = 0
                 self.next = 0
             elif self.frame == 17:
@@ -207,7 +211,7 @@ class Ragna:
                 self.next = 0
                 self.Rdouble = False
                 self.Ldouble = False
-        elif self.state == 41:
+        elif self.state == self.DASHCOM:
             self.frame = self.frame+1
             if self.frame == 16:
                 self.state = self.STAND
@@ -217,7 +221,7 @@ class Ragna:
             self.frame = self.frame+1
             self.Gjump -= 10
             if self.next==1 and self.jumpdo==False:
-                self.state=822
+                self.state=self.JUMPCOM2
                 self.frame=0
                 self.next=0
             if self.frame<10:
@@ -237,7 +241,7 @@ class Ragna:
             if self.frame>4:
                 self.state=self.STAND
                 self.frame=0
-        elif self.state == 82:
+        elif self.state == self.UPPER:
             self.frame = self.frame+1
             if self.frame>8:
                 self.x +=self.see*10
@@ -245,13 +249,13 @@ class Ragna:
             if self.frame>21:
                 if self.next==0:
                     self.frame = 80
-                    self.state =8
+                    self.state =self.JUMP_UP
                     self.Gjump=0
                 elif  self.next==1:
                     self.frame =0
-                    self.state = 822
+                    self.state = self.JUMPCOM1
                 self.next=0
-        elif self.state== 822:
+        elif self.state== self.JUMPCOM1:
             self.frame= self.frame+1
             self.jumpdo=True
 
@@ -263,20 +267,20 @@ class Ragna:
 
                 elif self.next==1:
                     self.frame=0
-                    self.state=823
+                    self.state= self.JUMPCOM2
                 self.next=0
-        elif self.state ==823:
+        elif self.state == self.JUMPCOM2:
             self.frame = self.frame+1
             if self.frame>10:
                 if self.next ==1:
                     self.frame = 0
-                    self.state=824
+                    self.state=self.JUMPCOM3
                 else:
                     self.frame=90
                     self.state=self.JUMP_UP
                     self.Gjump=0
 
-        elif self.state == 824:
+        elif self.state == self.JUMPCOM3:
             if self.frame<6 or self.frame>6:
                 self.frame = self.frame+1
             else:
@@ -291,24 +295,24 @@ class Ragna:
                 self.next=0
     def draw(self):
         if self.see == -1:
-            if self.state == 0:
+            if self.state == self.STAND:
                 if self.frame < 7:
                     LoadRe.rag.Lstand.clip_draw_to_origin(self.frame * 350, 0, 350, 450, self.x, self.y, 175, 225)
                 else:
                     LoadRe.rag.Lstand.clip_draw_to_origin((13 - self.frame) * 350, 0, 350, 450, self.x, self.y, 175, 225)
-            elif self.state == 2:
+            elif self.state == self.PUNCH:
                 LoadRe.rag.Lpunch.clip_draw_to_origin(self.frame * 480, 0, 480, 430, self.x - 90, self.y, 240, 215)
-            elif self.state == 211:
+            elif self.state == self.NOMCO1:
                 if self.frame > 8:
                     LoadRe.rag.nomco1.clip_draw_to_origin((self.frame - 9) * 720, 0, 720, 430, self.x - 180, self.y, 360, 215)
                 else:
                     LoadRe.rag.nomco1.clip_draw_to_origin(self.frame * 720, 430, 720, 430, self.x - 180, self.y, 360, 215)
-            elif self.state == 212:
+            elif self.state == self.NOMCO2:
                 if self.frame > 8:
                     LoadRe.rag.nomco2.clip_draw_to_origin((self.frame - 9) * 800, 0, 800, 430, self.x - 270, self.y, 400, 215)
                 else:
                     LoadRe.rag.nomco2.clip_draw_to_origin(self.frame * 800, 430, 800, 430, self.x - 270, self.y, 400, 215)
-            elif self.state == 213:
+            elif self.state == self.NOMCO3:
                 if self.frame < 7:
                     LoadRe.rag.nomco3.clip_draw_to_origin(self.frame * 1100, 1000, 1100, 490, self.x - 300, self.y, 550, 250)
                 elif self.frame < 14:
@@ -317,60 +321,58 @@ class Ragna:
                 else:
                     LoadRe.rag.nomco3.clip_draw_to_origin((self.frame - 14) * 1100, 0, 1100, 490, self.x - 330, self.y, 550,
                                                     250)
-            elif self.state == 3:
+            elif self.state == self.WALK:
                 LoadRe.rag.Lwalk.clip_draw_to_origin(self.frame * 300, 0, 300, 450, self.x, self.y, 150, 225)
-            elif self.state == 4:
+            elif self.state == self.DASH:
                 if self.frame < 9:
                     LoadRe.rag.dash.clip_draw_to_origin(self.frame * 800, 500 ,800, 500, self.x-200,self.y , 400, 250)
                 else :
                     LoadRe.rag.dash.clip_draw_to_origin((self.frame-9) * 800, 0, 800, 500, self.x-200, self.y, 400, 250)
-            elif self.state == 41:
+            elif self.state == self.DASHCOM:
                 if self.frame<5:
                     LoadRe.rag.dash2.clip_draw_to_origin(self.frame * 1000, 1040, 1000, 520, self.x-330, self.y-20, 500, 260)
                 elif self.frame<11:
                     LoadRe.rag.dash2.clip_draw_to_origin((self.frame-5) * 1000, 520, 1000, 520, self.x-330, self.y-20, 500, 260)
                 else:
                     LoadRe.rag.dash2.clip_draw_to_origin((self.frame-11) * 1000, 0, 1000, 520, self.x-330, self.y-20, 500, 260)
-            elif self.state== 8:
+            elif self.state== self.JUMP_UP:
                 if self.frame>6:
                     LoadRe.rag.jump_up.clip_draw_to_origin(2400,0,400,530, self.x-40,self.y, 200,265)
                 else:
                     LoadRe.rag.jump_up.clip_draw_to_origin(self.frame*400,0,400,530, self.x-40,self.y, 200,265)
-            elif self.state == 81:
+            elif self.state == self.JUMP_DOWN:
                 LoadRe.rag.jump_down.clip_draw_to_origin(self.frame*400,0, 400, 448, self.x-40,self.y, 200,224)
-            elif self.state==82:
+            elif self.state==self.UPPER:
                 if self.frame<11:
                     LoadRe.rag.upcom1.clip_draw_to_origin(self.frame*660,550,660,550, self.x-150,self.y,330,275)
                 else:
                     LoadRe.rag.upcom1.clip_draw_to_origin((self.frame-11)*660,0,660,550, self.x-150,self.y,330,275)
-            elif self.state == 822:
+            elif self.state == self.JUMPCOM1:
                 LoadRe.rag.upcom2.clip_draw_to_origin(self.frame*500,0,500,500,self.x-80,self.y,250,250)
-            elif self.state == 823:
+            elif self.state == self.JUMPCOM2:
                 LoadRe.rag.upcom3.clip_draw_to_origin(self.frame*500,0,500,500,self.x-50,self.y,250,250)
-            elif self.state == 824:
+            elif self.state == self.JUMPCOM3:
                 LoadRe.rag.upcom4.clip_draw_to_origin(self.frame*500,0,500,500,self.x-50,self.y,250,250)
 
         elif self.see ==1:
-            if self.state == 0:
+            if self.state ==self.STAND:
                 if self.frame < 7:
                     LoadRe.rag.Rstand.clip_draw_to_origin(self.frame * 350, 0, 350, 450, self.x, self.y, 175, 225)
                 else:
                     LoadRe.rag.Rstand.clip_draw_to_origin((13 - self.frame) * 350, 0, 350, 450, self.x, self.y, 175, 225)
-            elif self.state == 1:
-                LoadRe.rag.stand2.clip_draw_to_origin(self.frame * 350, 0, 350, 350, self.x, self.y, 175, 225)
-            elif self.state == 2:
+            elif self.state == self.PUNCH:
                 LoadRe.rag.Rpunch.clip_draw_to_origin(self.frame * 480, 0, 480, 430, self.x -25, self.y, 240, 215)
-            elif self.state == 211:
+            elif self.state == self.NOMCO1:
                 if self.frame > 8:
                     LoadRe.rag.Rnomco1.clip_draw_to_origin((self.frame - 9) * 720, 0, 720, 430, self.x-40 , self.y, 360, 215)
                 else:
                     LoadRe.rag.Rnomco1.clip_draw_to_origin(self.frame * 720, 430, 720, 430, self.x -40, self.y, 360, 215)
-            elif self.state == 212:
+            elif self.state == self.NOMCO2:
                 if self.frame > 8:
                     LoadRe.rag.Rnomco2.clip_draw_to_origin((self.frame - 9) * 800, 0, 800, 430, self.x , self.y, 400, 215)
                 else:
                     LoadRe.rag.Rnomco2.clip_draw_to_origin(self.frame * 800, 430, 800, 430, self.x , self.y, 400, 215)
-            elif self.state == 213:
+            elif self.state == self.NOMCO3:
                 if self.frame < 7:
                     LoadRe.rag.Rnomco3.clip_draw_to_origin(self.frame * 1100, 1000, 1100, 490, self.x -90, self.y, 550, 250)
                 elif self.frame < 14:
@@ -379,36 +381,36 @@ class Ragna:
                 else:
                     LoadRe.rag.Rnomco3.clip_draw_to_origin((self.frame - 14) * 1100, 0, 1100, 490, self.x -90, self.y, 550,
                                                         250)
-            elif self.state == 3:
+            elif self.state == self.WALK:
                 LoadRe.rag.Rwalk.clip_draw_to_origin(self.frame * 300, 0, 300, 450, self.x, self.y, 150, 225)
-            elif self.state == 4:
+            elif self.state == self.DASH:
                 if self.frame < 9:
                     LoadRe.rag.Rdash.clip_draw_to_origin(self.frame * 800, 500 ,800, 500, self.x-60,self.y , 400, 250)
                 else :
                     LoadRe.rag.Rdash.clip_draw_to_origin((self.frame-9) * 800, 0, 800, 500, self.x-60, self.y, 400, 250)
-            elif self.state == 41:
+            elif self.state == self.DASHCOM:
                 if self.frame<5:
                     LoadRe.rag.Rdash2.clip_draw_to_origin(self.frame * 1000, 1040, 1000, 520, self.x-30, self.y-20, 500, 260)
                 elif self.frame<11:
                     LoadRe.rag.Rdash2.clip_draw_to_origin((self.frame-5) * 1000, 520, 1000, 520, self.x-30, self.y-20, 500, 260)
                 else:
                     LoadRe.rag.Rdash2.clip_draw_to_origin((self.frame-11) * 1000, 0, 1000, 520, self.x-30, self.y-20, 500, 260)
-            elif self.state== 8:
+            elif self.state== self.JUMP_UP:
                 if self.frame>6:
                     LoadRe.rag.Rjump_up.clip_draw_to_origin(2400,0,400,530, self.x-40,self.y, 200,265)
                 else:
                     LoadRe.rag.Rjump_up.clip_draw_to_origin(self.frame*400,0,400,530, self.x-40,self.y, 200,265)
-            elif self.state == 81:
+            elif self.state == self.JUMP_DOWN:
                 LoadRe.rag.Rjump_down.clip_draw_to_origin(self.frame*400,0, 400, 448, self.x-40,self.y, 200,224)
-            elif self.state==82:
+            elif self.state==self.UPPER:
                 if self.frame<11:
                     LoadRe.rag.Rupcom1.clip_draw_to_origin(self.frame*660,550,660,550, self.x,self.y,330,275)
                 else:
                     LoadRe.rag.Rupcom1.clip_draw_to_origin((self.frame-11)*660,0,660,550, self.x,self.y,330,275)
-            elif self.state == 822:
+            elif self.state == self.JUMPCOM1:
                 LoadRe.rag.Rupcom2.clip_draw_to_origin(self.frame*500,0,500,500,self.x,self.y,250,250)
-            elif self.state == 823:
+            elif self.state == self.JUMPCOM2:
                 LoadRe.rag.Rupcom3.clip_draw_to_origin(self.frame*500,0,500,500,self.x,self.y,250,250)
-            elif self.state == 824:
+            elif self.state == self.JUMPCOM3:
                 LoadRe.rag.Rupcom4.clip_draw_to_origin(self.frame*500,0,500,500,self.x-50,self.y,250,250)
 

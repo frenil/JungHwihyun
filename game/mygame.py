@@ -4,7 +4,7 @@ import start_state
 import LoadRe
 
 
-open_canvas(1280,720)
+open_canvas(1280,720,sync = True)
 
 image = load_image('title.png')
 image.draw_now(640,360)
