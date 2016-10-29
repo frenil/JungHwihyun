@@ -2,7 +2,6 @@ from pico2d import *
 import LoadRe
 
 class Ragna:
-    PIXEL_PER_METER = (10.0/ 0.3)
 
     STAND,WALK, DASH, DASHCOM  = 0, 3,4,41
     PUNCH, NOMCO1, NOMCO2, NOMCO3 = 2,211,212,213
