@@ -16,6 +16,8 @@ class Dall_image:
         self.Rstand = load_image('resource/Rdallstand.png')
         self.Lhit = load_image('resource/dallhit.png')
         self.Rhit = load_image('resource/Rdallhit.png')
+        self.Lpunch = load_image('resource/dallPunch.png')
+        self.Rpunch = load_image('resource/RdallPunch.png')
 
 
 class Ragna_image:

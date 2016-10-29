@@ -29,6 +29,8 @@ class Back:
 def enter():
     global back, player, dall
     global LKeyco, RKeyco
+    global count
+    count=0
     RKeyco, LKeyco = 0, 0
 
     back = Back()
@@ -92,6 +94,7 @@ def handle_events():
 
 def update():
     global LKeyco, RKeyco
+    global count
     if player.Ldown == False:
         LKeyco = LKeyco + 1
     if player.Rdown == False:
