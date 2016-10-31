@@ -143,7 +143,7 @@ class Ragna:
             self.frame = self.frame+1
             if self.frame == 5:
                 if self.next == 0:
-                    self.state = 0
+                    self.state = self.STAND
                 elif self.next == 1:
                     self.state = self.NOMCO1
                 elif self.next == 8:
@@ -220,7 +220,7 @@ class Ragna:
             self.frame = self.frame+1
             self.Gjump -= 10
             if self.next==1 and self.jumpdo==False:
-                self.state=self.JUMPCOM2
+                self.state=self.JUMPCOM1
                 self.frame=0
                 self.next=0
             if self.frame<10:
