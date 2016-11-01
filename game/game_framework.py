@@ -9,7 +9,7 @@ class GameState:
         self.draw = state.draw
 class Image:
     def __init__(self):
-        self.Ragna
+        pass
 
 class TestGameState:
 
