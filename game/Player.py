@@ -119,6 +119,12 @@ class Ragna:
                 return(self.x-50,self.y, self.x+130,self.y+150)
         return(0,0,0,0)
     def update(self):
+        distance = Ragna.WALK_SPEED_PPS *frame_time
+        self.total_frames +=1.0
+
+
+
+
         if self.x < 40:
             self.x = 40
         elif self.x > 1280 - 200:
@@ -191,8 +197,9 @@ class Ragna:
 
             self.walkframe =(self.walkframe+1)%2
             if self.walkframe == 1:
-                self.frame = (self.frame + 1)%9
-            self.x += self.see*10
+                self.frame = (self.frame + 1) % 9
+
+            self.x += self.see*self.dir*distance
             if self.walking == False:
                 self.walkframe = 0
                 self.state = self.STAND
