@@ -1,15 +1,19 @@
 from pico2d import *
 import LoadRe
+import game_framework
 
-
+def Speed(kmph):
+    PIXEL_PER_METER = (100.0 / 0.8)  # 100픽셀 0.8m
+    SPEED_KMPH = kmph
+    SPEED_MPM = (SPEED_KMPH * 1000 / 60)
+    SPEED_MPS = SPEED_MPM / 60
+    SPEED_PPS = SPEED_MPS * PIXEL_PER_METER
+    distance = SPEED_PPS * game_framework.frame_time
+    return distance
 class Ragna:
     PIXEL_PER_METER = (100.0 / 1)  # 100픽셀 1m
     WALK_SPEED_KMPH = 10
-    WALK_SPEED_MPM = (WALK_SPEED_KMPH*1000/60)
-    WALK_SPEED_MPS = WALK_SPEED_MPM/60
-    WALK_SPEED_PPS = WALK_SPEED_MPS*PIXEL_PER_METER
-
-
+    Wsp=0
     STAND,WALK, DASH, DASHCOM  = 0, 3,4,41
     PUNCH, NOMCO1, NOMCO2, NOMCO3 = 2,211,212,213
     JUMP_UP, JUMP_DOWN, UPPER, JUMPCOM1, JUMPCOM2, JUMPCOM3= 8 , 81, 82,822,823,824
@@ -27,6 +31,7 @@ class Ragna:
         self.next =0
         self.walking = False
         self.walkframe= 0
+        self.total_frames=0
 
     def get_Rect(self):
         if self.see == 1:
@@ -119,8 +124,10 @@ class Ragna:
                 return(self.x-50,self.y, self.x+130,self.y+150)
         return(0,0,0,0)
     def update(self):
-        distance = Ragna.WALK_SPEED_PPS *frame_time
-        self.total_frames +=1.0
+        Wsp = Speed(6)
+        Dsp = Speed(60)
+        self.total_frames += 1
+
 
 
 
@@ -199,7 +206,7 @@ class Ragna:
             if self.walkframe == 1:
                 self.frame = (self.frame + 1) % 9
 
-            self.x += self.see*self.dir*distance
+            self.x += self.see*Wsp
             if self.walking == False:
                 self.walkframe = 0
                 self.state = self.STAND
@@ -213,7 +220,7 @@ class Ragna:
         elif self.state ==self.DASH:
             self.frame = (self.frame+1)%19
             if self.frame>4 and self.frame < 11:
-                self.x += self.see*60
+                self.x += self.see*Dsp
             if self.frame == 12 and self.next == 1:
                 self.state = self.DASHCOM
                 self.frame = 0
