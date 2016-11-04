@@ -11,7 +11,7 @@ def Speed(kmph):
     distance = SPEED_PPS * game_framework.frame_time
     return distance
 class Ragna:
-    PIXEL_PER_METER = (100.0 / 1)  # 100픽셀 1m
+    PIXEL_PER_METER = (100.0 / 0.8)  # 100픽셀 1m
     WALK_SPEED_KMPH = 10
     Wsp=0
     STAND,WALK, DASH, DASHCOM  = 0, 3,4,41
@@ -125,7 +125,7 @@ class Ragna:
         return(0,0,0,0)
     def update(self):
         Wsp = Speed(6)
-        Dsp = Speed(60)
+        Dsp = Speed(40)
         self.total_frames += 1
 
 
