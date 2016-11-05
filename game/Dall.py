@@ -60,9 +60,9 @@ class dall:
                     LoadRe.dall.Lhit.clip_draw_to_origin((9-self.frame) * 400, 0, 400, 410, self.x, self.y, 200, 205)
             if self.state == self.PUNCH:
                 if self.frame<9:
-                    LoadRe.dall.Lpunch.clip_draw_to_origin(self.frame * 640, 400, 640, 400, self.x, self.y, 320, 200)
+                    LoadRe.dall.Lpunch.clip_draw_to_origin(self.frame * 640, 400, 640, 400, self.x-70, self.y, 320, 200)
                 else:
-                    LoadRe.dall.Lpunch.clip_draw_to_origin((self.frame-9) * 640, 0, 640, 400, self.x, self.y, 320, 200)
+                    LoadRe.dall.Lpunch.clip_draw_to_origin((self.frame-9) * 640, 0, 640, 400, self.x-70, self.y, 320, 200)
 
         elif self.see ==1:
             if self.state == 0 or self.state ==8:
@@ -74,6 +74,6 @@ class dall:
                     LoadRe.dall.Rhit.clip_draw_to_origin((9-self.frame) * 400, 0, 400, 410, self.x, self.y, 200, 205)
             if self.state == self.PUNCH:
                 if self.frame<9:
-                    LoadRe.dall.Rpunch.clip_draw_to_origin(self.frame * 640, 400, 640, 400, self.x, self.y, 320, 200)
+                    LoadRe.dall.Rpunch.clip_draw_to_origin(self.frame * 640, 400, 640, 400, self.x-70, self.y, 320, 200)
                 else:
-                    LoadRe.dall.Rpunch.clip_draw_to_origin((self.frame-9) * 640, 0, 640, 400, self.x, self.y, 320, 200)
+                    LoadRe.dall.Rpunch.clip_draw_to_origin((self.frame-9) * 640, 0, 640, 400, self.x-70, self.y, 320, 200)
