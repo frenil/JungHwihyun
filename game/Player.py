@@ -3,7 +3,7 @@ import LoadRe
 import game_framework
 
 def Speed(kmph):
-    PIXEL_PER_METER = (100.0 / 0.8)  # 100픽셀 0.8m
+    PIXEL_PER_METER = (100.0 / 1)  # 100픽셀 0.8m
     SPEED_KMPH = kmph
     SPEED_MPM = (SPEED_KMPH * 1000 / 60)
     SPEED_MPS = SPEED_MPM / 60
@@ -11,9 +11,8 @@ def Speed(kmph):
     distance = SPEED_PPS * game_framework.frame_time
     return distance
 class Ragna:
-    PIXEL_PER_METER = (100.0 / 0.8)  # 100픽셀 1m
     WALK_SPEED_KMPH = 10
-    Wkmph, Dkmph, Jkmph = 6, 40, 90
+    Wkmph, Dkmph, Jkmph = 18, 80, 90
     STAND,WALK, DASH, DASHCOM  = 0, 3,4,41
     PUNCH, NOMCO1, NOMCO2, NOMCO3 = 2,211,212,213
     JUMP_UP, JUMP_DOWN, UPPER, JUMPCOM1, JUMPCOM2, JUMPCOM3= 8 , 81, 82,822,823,824
@@ -199,7 +198,6 @@ class Ragna:
                 self.state = self.JUMP_UP
                 self.next = 0
                 self.frame =0
-                self.Gjump=80
 
             self.walkframe =(self.walkframe+1)%2
             if self.walkframe == 1:
@@ -264,7 +262,7 @@ class Ragna:
                 self.y += 26
             if self.frame>21:
                 if self.next==0:
-                    self.frame = 30
+                    self.frame = 10
                     self.state =self.JUMP_UP
                     self.Gjump=0
                 elif  self.next==1:
@@ -277,7 +275,7 @@ class Ragna:
 
             if self.frame>11:
                 if self.next==0:
-                    self.frame=30
+                    self.frame=10
                     self.state=self.JUMP_UP
                     self.Gjump=0
 
@@ -292,7 +290,7 @@ class Ragna:
                     self.frame = 0
                     self.state=self.JUMPCOM3
                 else:
-                    self.frame=30
+                    self.frame=10
                     self.state=self.JUMP_UP
                     self.Gjump=0
 
@@ -300,7 +298,7 @@ class Ragna:
             if self.frame<6 or self.frame>6:
                 self.frame = self.frame+1
             else:
-                self.x += self.see*15
+                self.x += self.see*Speed(10)
                 self.y -= 60
             if self.y<=50:
                 self.frame+=1
