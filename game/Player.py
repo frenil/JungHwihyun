@@ -13,10 +13,11 @@ def Speed(kmph):
 class Ragna:
     PIXEL_PER_METER = (100.0 / 0.8)  # 100픽셀 1m
     WALK_SPEED_KMPH = 10
-    Wsp=0
+    Wkmph, Dkmph, Jkmph = 6, 40, 90
     STAND,WALK, DASH, DASHCOM  = 0, 3,4,41
     PUNCH, NOMCO1, NOMCO2, NOMCO3 = 2,211,212,213
     JUMP_UP, JUMP_DOWN, UPPER, JUMPCOM1, JUMPCOM2, JUMPCOM3= 8 , 81, 82,822,823,824
+
     def __init__(self):
         self.x,self.y = 300,50
         self.Ldown,self.Rdown = False,False
@@ -33,6 +34,9 @@ class Ragna:
         self.walkframe= 0
         self.total_frames=0
 
+        self.Wsp = Speed(self.Wkmph)
+        self.Dsp = Speed(self.Dkmph)
+        self.Jsp = Speed(self.Jkmph)
     def get_Rect(self):
         if self.see == 1:
             if self.state == 2 and self.frame == 2:
@@ -124,13 +128,8 @@ class Ragna:
                 return(self.x-50,self.y, self.x+130,self.y+150)
         return(0,0,0,0)
     def update(self):
-        Wsp = Speed(6)
-        Dsp = Speed(40)
+
         self.total_frames += 1
-
-
-
-
 
         if self.x < 40:
             self.x = 40
@@ -206,7 +205,7 @@ class Ragna:
             if self.walkframe == 1:
                 self.frame = (self.frame + 1) % 9
 
-            self.x += self.see*Wsp
+            self.x += self.see*self.Wsp
             if self.walking == False:
                 self.walkframe = 0
                 self.state = self.STAND
@@ -220,7 +219,7 @@ class Ragna:
         elif self.state ==self.DASH:
             self.frame = (self.frame+1)%19
             if self.frame>4 and self.frame < 11:
-                self.x += self.see*Dsp
+                self.x += self.see*self.Dsp
             if self.frame == 12 and self.next == 1:
                 self.state = self.DASHCOM
                 self.frame = 0
@@ -239,15 +238,12 @@ class Ragna:
                 self.next = 0
         elif self.state == self.JUMP_UP:
             self.frame = self.frame+1
-            self.Gjump -= 10
+
             if self.next==1 and self.jumpdo==False:
                 self.state=self.JUMPCOM1
                 self.frame=0
                 self.next=0
-            if self.frame<10:
-                self.y += self.Gjump
-            else:
-                self.y+=self.Gjump
+            self.y += self.Jsp-Speed(self.frame*3)
             if self.y<=50:
                 self.y=50
                 self.state = self.JUMP_DOWN
@@ -255,7 +251,7 @@ class Ragna:
                 self.next=0
                 self.jumpdo=False
             if self.Ldown== True or self.Rdown == True:
-                self.x += self.see*10
+                self.x += self.see*self.Wsp
         elif self.state == self.JUMP_DOWN:
             self.frame +=1
             if self.frame>4:
@@ -264,11 +260,11 @@ class Ragna:
         elif self.state == self.UPPER:
             self.frame = self.frame+1
             if self.frame>8:
-                self.x +=self.see*10
+                self.x +=self.see*self.Wsp
                 self.y += 26
             if self.frame>21:
                 if self.next==0:
-                    self.frame = 80
+                    self.frame = 30
                     self.state =self.JUMP_UP
                     self.Gjump=0
                 elif  self.next==1:
@@ -281,7 +277,7 @@ class Ragna:
 
             if self.frame>11:
                 if self.next==0:
-                    self.frame=90
+                    self.frame=30
                     self.state=self.JUMP_UP
                     self.Gjump=0
 
@@ -296,7 +292,7 @@ class Ragna:
                     self.frame = 0
                     self.state=self.JUMPCOM3
                 else:
-                    self.frame=90
+                    self.frame=30
                     self.state=self.JUMP_UP
                     self.Gjump=0
 
