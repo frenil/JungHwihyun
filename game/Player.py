@@ -3,7 +3,7 @@ import LoadRe
 import game_framework
 
 def Speed(kmph):
-    PIXEL_PER_METER = (100.0 / 1)  # 100픽셀 0.8m
+    PIXEL_PER_METER = (100.0 / 1)  # 100픽셀 1m
     SPEED_KMPH = kmph
     SPEED_MPM = (SPEED_KMPH * 1000 / 60)
     SPEED_MPS = SPEED_MPM / 60
@@ -13,9 +13,11 @@ def Speed(kmph):
 class Ragna:
     WALK_SPEED_KMPH = 10
     Wkmph, Dkmph, Jkmph = 18, 80, 90
+    Xhkmph,Yhkmph = 9, 45
     STAND,WALK, DASH, DASHCOM  = 0, 3,4,41
     PUNCH, NOMCO1, NOMCO2, NOMCO3 = 2,211,212,213
     JUMP_UP, JUMP_DOWN, UPPER, JUMPCOM1, JUMPCOM2, JUMPCOM3= 8 , 81, 82,822,823,824
+    HIT = 5
 
     def __init__(self):
         self.x,self.y = 300,50
@@ -37,6 +39,7 @@ class Ragna:
         self.Wsp = Speed(self.Wkmph)
         self.Dsp = Speed(self.Dkmph)
         self.Jsp = Speed(self.Jkmph)
+        self.Ysp = Speed(self.Yhkmph)
     def get_Rect(self):
         if self.see == 1:
             if self.state == 2 and self.frame == 2:
@@ -236,6 +239,16 @@ class Ragna:
                 self.state = self.STAND
                 self.frame = 0
                 self.next = 0
+        elif self.state == self.HIT:
+            self.frame = self.frame +1
+            self.x += -0.5*(self.see*self.Wsp)
+            self.y += self.Ysp -Speed(self.frame*3)
+
+            if self.y <=50:
+                self.state = self.STAND
+                self.frame=0
+                self.y=50
+
         elif self.state == self.JUMP_UP:
             self.frame = self.frame+1
 
@@ -359,6 +372,14 @@ class Ragna:
                     LoadRe.rag.dash2.clip_draw_to_origin((self.frame-5) * 1000, 520, 1000, 520, self.x-330, self.y-20, 500, 260)
                 else:
                     LoadRe.rag.dash2.clip_draw_to_origin((self.frame-11) * 1000, 0, 1000, 520, self.x-330, self.y-20, 500, 260)
+            elif self.state == self.HIT:
+                if self.frame>4:
+                    LoadRe.rag.hit.clip_draw_to_origin(1600, 0, 400, 420, self.x , self.y, 200, 210)
+                else:
+                    LoadRe.rag.hit.clip_draw_to_origin((self.frame) * 400, 0, 400, 420, self.x , self.y, 200, 210)
+
+
+
             elif self.state== self.JUMP_UP:
                 if self.frame>6:
                     LoadRe.rag.jump_up.clip_draw_to_origin(2400,0,400,530, self.x-40,self.y, 200,265)

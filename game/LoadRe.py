@@ -69,3 +69,4 @@ class Ragna_image:
         self.upcom4 = load_image('resource/upcom4.png')
         self.Rupcom4 = load_image('resource/Rupcom4.png')
         LoadCount +=1
+        self.hit = load_image('resource/hit.png')

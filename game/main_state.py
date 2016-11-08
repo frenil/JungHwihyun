@@ -68,6 +68,9 @@ def handle_events():
                 running = False
             elif event.key == SDLK_a :
                 player.next = 1
+            elif event.key == SDLK_z :
+                player.state = player.HIT
+                player.frame=0
 
             if event.key == SDLK_LEFT:
                 player.Ldown = True
