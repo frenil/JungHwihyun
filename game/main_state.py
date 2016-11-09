@@ -70,19 +70,19 @@ def handle_events():
                 player.next = 1
             elif event.key == SDLK_z :
                 player.state = player.HIT
-                player.frame=0
+                player.total_frames = 0
 
             if event.key == SDLK_LEFT:
                 player.Ldown = True
                 if player.state == 0 or player.state == 3:
                     player.see = -1
-                if LKeyco < 5:
+                if LKeyco < 10:
                     player.Ldouble = True
             if event.key == SDLK_RIGHT:
                 player.Rdown = True
                 if player.state == 0 or player.state == 3:
                     player.see = 1
-                if RKeyco < 5:
+                if RKeyco < 10:
                     player.Rdouble = True
             if event.key == SDLK_UP:
                 player.next=8
@@ -128,7 +128,6 @@ def update():
             dall.Yhit=15
         dall.see = player.see* -1
         dall.ishit =True
-    delay(0.03)
 
 def collide(player,dall):
     left_a, bottom_a, right_a, top_a = player.get_bb()

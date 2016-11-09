@@ -3,7 +3,7 @@ import LoadRe
 import game_framework
 
 def Speed(kmph):
-    PIXEL_PER_METER = (100.0 / 1)  # 100픽셀 1m
+    PIXEL_PER_METER = (100.0 / 0.8)  # 100픽셀 0.8m
     SPEED_KMPH = kmph
     SPEED_MPM = (SPEED_KMPH * 1000 / 60)
     SPEED_MPS = SPEED_MPM / 60
@@ -12,12 +12,17 @@ def Speed(kmph):
     return distance
 class Ragna:
     WALK_SPEED_KMPH = 10
-    Wkmph, Dkmph, Jkmph = 18, 80, 90
+    Wkmph, Dkmph, Jkmph = 8, 30, 40
     Xhkmph,Yhkmph = 9, 45
     STAND,WALK, DASH, DASHCOM  = 0, 3,4,41
     PUNCH, NOMCO1, NOMCO2, NOMCO3 = 2,211,212,213
     JUMP_UP, JUMP_DOWN, UPPER, JUMPCOM1, JUMPCOM2, JUMPCOM3= 8 , 81, 82,822,823,824
     HIT = 5
+
+    TIME_PER_ACTION = 0.5
+    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    FRAME_PER_ACTION = 12
+
 
     def __init__(self):
         self.x,self.y = 300,50
@@ -132,7 +137,8 @@ class Ragna:
         return(0,0,0,0)
     def update(self):
 
-        self.total_frames += 1
+        self.total_frames += self.FRAME_PER_ACTION * self.ACTION_PER_TIME * game_framework.frame_time
+
 
         if self.x < 40:
             self.x = 40
@@ -145,7 +151,7 @@ class Ragna:
         if self.Ldown == True and (self.state == 0 or self.state == 3or self.state == 8):
             self.see = -1
         if self.state == self.STAND :
-            self.frame = (self.frame+1)%13
+            self.frame = int(self.total_frames)%13
             self.stcount+=1
             self.jump_act = 0
 
@@ -156,14 +162,14 @@ class Ragna:
             elif self.next == 1:
                 self.state = self.PUNCH
                 self.next = 0
-                self.frame = 0
+                self.total_frames = 0
             elif self.next == 8:
                 self.state = self.JUMP_UP
                 self.next = 0
-                self.frame =0
+                self.total_frames =0
                 self.Gjump=80
         elif self.state == self.PUNCH:
-            self.frame = self.frame+1
+            self.frame = int(self.total_frames)
             if self.frame == 5:
                 if self.next == 0:
                     self.state = self.STAND
@@ -172,85 +178,85 @@ class Ragna:
                 elif self.next == 8:
                     self.state = self.UPPER
                 self.next = 0
-                self.frame = 0
+                self.total_frames = 0
         elif self.state == self.NOMCO1:
-            self.frame = self.frame+1
+            self.frame =  int(self.total_frames)
             if self.frame == 16:
                if self.next == 1:
                     self.state =self.NOMCO2
                else:
                     self.state = self.STAND
 
-               self.frame = 0
+               self.total_frames = 0
                self.next = 0
         elif self.state == self.NOMCO2:
-            self.frame = (self.frame+1)%17
+            self.frame =  int(self.total_frames)
             if self.frame ==16:
                 if self.next == 1:
                     self.state = self.NOMCO3
                 else:
                     self.state=self.STAND
-                self.frame = 0
+                self.total_frames = 0
                 self.next=0
         elif self.state ==self.NOMCO3:
-            self.frame = self.frame + 1
+            self.frame = int(self.total_frames)
             if self.frame ==20:
                 self.state = self.STAND
-                self.frame = 0
+                self.total_frames = 0
                 self.next = 0
         elif self.state == self.WALK :
             if self.next == 8:
                 self.state = self.JUMP_UP
                 self.next = 0
-                self.frame =0
+                self.total_frames =0
 
-            self.walkframe =(self.walkframe+1)%2
+            self.walkframe =(self.walkframe+1)%5
             if self.walkframe == 1:
-                self.frame = (self.frame + 1) % 9
+                self.frame =  int(self.total_frames) % 9
 
             self.x += self.see*self.Wsp
             if self.walking == False:
                 self.walkframe = 0
                 self.state = self.STAND
-                self.frame = 0
+                self.total_frames = 0
             elif self.Rdouble == True or self.Ldouble == True:
                 self.state = self.DASH
-                self.frame = 0
+                self.total_frames = 0
                 self.next = 0
                 self.Rdouble=False
                 self.Ldouble = False
         elif self.state ==self.DASH:
-            self.frame = (self.frame+1)%19
+            self.frame =  int(self.total_frames)
             if self.frame>4 and self.frame < 11:
                 self.x += self.see*self.Dsp
             if self.frame == 12 and self.next == 1:
                 self.state = self.DASHCOM
-                self.frame = 0
+                self.total_frames = 0
                 self.next = 0
             elif self.frame == 17:
                 self.state = self.STAND
-                self.frame = 0
+                self.total_frames = 0
                 self.next = 0
                 self.Rdouble = False
                 self.Ldouble = False
         elif self.state == self.DASHCOM:
-            self.frame = self.frame+1
+            self.frame =  int(self.total_frames)
             if self.frame == 16:
                 self.state = self.STAND
-                self.frame = 0
+                self.total_frames = 0
                 self.next = 0
         elif self.state == self.HIT:
-            self.frame = self.frame +1
+            self.frame = int(self.total_frames)
             self.x += -0.5*(self.see*self.Wsp)
-            self.y += self.Ysp -Speed(self.frame*3)
+            self.y += (self.Ysp/2) -Speed(self.frame*5)
 
             if self.y <=50:
                 self.state = self.STAND
-                self.frame=0
+                self.total_frames=0
                 self.y=50
 
         elif self.state == self.JUMP_UP:
-            self.frame = self.frame+1
+            self.frame = int(self.total_frames)
 
             if self.next==1 and self.jump_act<3:
                 if self.jump_act==0:
@@ -259,76 +265,76 @@ class Ragna:
                     self.state=self.JUMPCOM2
                 elif self.jump_act==2:
                     self.state=self.JUMPCOM3
-                self.frame=0
+                self.total_frames=0
                 self.next=0
             self.y += self.Jsp-Speed(self.frame*3)
             if self.y<=50:
                 self.y=50
                 self.state = self.JUMP_DOWN
-                self.frame=0
+                self.total_frames=0
                 self.next=0
                 self.jumpdo=False
             if self.Ldown== True or self.Rdown == True:
                 self.x += self.see*self.Wsp
         elif self.state == self.JUMP_DOWN:
-            self.frame +=1
+            self.frame = int(self.total_frames)
             if self.frame>4:
                 self.state=self.STAND
-                self.frame=0
+                self.total_frames=0
         elif self.state == self.UPPER:
-            self.frame = self.frame+1
+            self.frame =  int(self.total_frames)
             if self.frame>8:
                 self.x +=self.see*self.Wsp
-                self.y += 26
+                self.y += self.Jsp/2
             if self.frame>21:
                 if self.next==0:
-                    self.frame = 10
+                    self.total_frames = 10
                     self.state =self.JUMP_UP
                     self.Gjump=0
                 elif  self.next==1:
-                    self.frame =0
+                    self.total_frames =0
                     self.state = self.JUMPCOM1
                 self.next=0
         elif self.state== self.JUMPCOM1:
-            self.frame= self.frame+1
+            self.frame=  int(self.total_frames)
             self.jumpdo=True
             self.jump_act = 1
 
             if self.frame>11:
                 if self.next==0:
-                    self.frame=10
+                    self.total_frames=10
                     self.state=self.JUMP_UP
                     self.Gjump=0
 
                 elif self.next==1:
-                    self.frame=0
+                    self.total_frames=0
                     self.state= self.JUMPCOM2
                 self.next=0
         elif self.state == self.JUMPCOM2:
-            self.frame = self.frame+1
+            self.frame =  int(self.total_frames)
             self.jump_act = 2
             if self.frame>10:
                 if self.next ==1:
-                    self.frame = 0
+                    self.total_frames = 0
                     self.state=self.JUMPCOM3
                 else:
-                    self.frame=10
+                    self.total_frames=10
                     self.state=self.JUMP_UP
                     self.Gjump=0
 
         elif self.state == self.JUMPCOM3:
             self.jump_act = 0
             if self.frame<6 or self.frame>6:
-                self.frame = self.frame+1
+                self.frame =  int(self.total_frames)
             else:
                 self.x += self.see*Speed(10)
                 self.y -= 60
             if self.y<=50:
-                self.frame+=1
+                self.frame = int(self.total_frames)
                 self.y=50
             if self.frame>10:
                 self.state=self.STAND
-                self.frame=0
+                self.total_frames=0
                 self.next=0
     def draw(self):
         if self.see == -1:
