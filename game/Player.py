@@ -11,8 +11,8 @@ def Speed(kmph):
     distance = SPEED_PPS * game_framework.frame_time
     return distance
 class Ragna:
-    WALK_SPEED_KMPH = 10
-    Wkmph, Dkmph, Jkmph = 8, 30, 40
+
+    Wkmph, Dkmph, Jkmph = 8, 30, 35
     Xhkmph,Yhkmph = 9, 45
     STAND,WALK, DASH, DASHCOM  = 0, 3,4,41
     PUNCH, NOMCO1, NOMCO2, NOMCO3 = 2,211,212,213
