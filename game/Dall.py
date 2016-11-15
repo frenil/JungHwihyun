@@ -1,11 +1,30 @@
 from pico2d import *
 import LoadRe
 import Player
+import game_framework
+
+
+def Speed(kmph):
+    PIXEL_PER_METER = (100.0 / 0.8)  # 100픽셀 0.8m
+    SPEED_KMPH = kmph
+    SPEED_MPM = (SPEED_KMPH * 1000 / 60)
+    SPEED_MPS = SPEED_MPM / 60
+    SPEED_PPS = SPEED_MPS * PIXEL_PER_METER
+    distance = SPEED_PPS * game_framework.frame_time
+    return distance
+
 class dall:
     PUNCH =2
+    Wkmph, Xhkmph,Yhkmph = 4,9, 45
+
+    TIME_PER_ACTION = 0.5
+    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    FRAME_PER_ACTION = 12
+
     def __init__(self):
         self.x,self.y = 800,50
         self.frame =0
+        self.total_frames =0
         self.state =0
         self.see = -1
         self.Yhit = 20
@@ -14,41 +33,49 @@ class dall:
         self.next =0
         self.tmp =0
 
+        self.Wsp = Speed(self.Wkmph)
+        self.Ysp = Speed(self.Yhkmph)
+
     def get_Rect(self):
 
         if self.see == 1:
             draw_rectangle(self.x,self.y, self.x+175,self.y+200)
         elif self.see == -1:
             draw_rectangle(self.x,self.y, self.x+175,self.y+200)
-    def get_bb(self):
+    def H_get_bb(self):
         return (self.x,self.y, self.x+175,self.y+200)
 
     def update(self):
+        self.total_frames += self.FRAME_PER_ACTION * self.ACTION_PER_TIME * game_framework.frame_time
+
+
         if self.x < 40:
             self.x = 40
         elif self.x > 1280 - 200:
              self.x = 1280 - 200
         if self.state == 0:
-            self.frame=(self.frame+1)%15
+            self.frame = int(self.total_frames)%15
             if self.frame == 14:
                 self.state= self.PUNCH
-                self.frame=0
+                self.total_frames=0
         if self.state == 1:
-            if self.frame<9:
-                self.frame+=1
-            self.x += (self.see*-self.Xhit)
-            self.y += self.Yhit
-            self.Yhit -=3
+            if self.frame<8:
+                self.frame = int(self.total_frames)
+            else:
+                self.frame = 8
+            self.x += -0.5*(self.see*self.Wsp)
+            self.y += (self.Ysp/2) -Speed(int(self.total_frames)*4)
             if self.y<=50:
                 self.y=50
                 self.state=0
-                self.frame=0
+                self.total_frames=0
                 self.ishit =False
         if self.state == self.PUNCH:
-            self.frame = self.frame+1
+            self.frame = int(self.total_frames)
+
             if self.frame >16:
                 self.state = 0
-                self.frame = 0
+                self.total_frames = 0
     def draw(self):
         if self.see == -1:
             if self.state == 0 or self.state ==8:

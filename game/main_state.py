@@ -110,6 +110,7 @@ def update():
         dall.see=-1
     if collide(player,dall) == True:
         dall.state  = 1
+        dall.total_frames=0
         dall.frame=0
         if player.state==4:
             dall.Xhit = 20
@@ -130,8 +131,8 @@ def update():
         dall.ishit =True
 
 def collide(player,dall):
-    left_a, bottom_a, right_a, top_a = player.get_bb()
-    left_b, bottom_b, right_b, top_b = dall.get_bb()
+    left_a, bottom_a, right_a, top_a = player.A_get_bb()
+    left_b, bottom_b, right_b, top_b = dall.H_get_bb()
     if left_a > right_b: return False
     if right_a < left_b: return False
     if top_a < bottom_b: return False

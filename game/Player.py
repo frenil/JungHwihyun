@@ -10,6 +10,7 @@ def Speed(kmph):
     SPEED_PPS = SPEED_MPS * PIXEL_PER_METER
     distance = SPEED_PPS * game_framework.frame_time
     return distance
+
 class Ragna:
 
     Wkmph, Dkmph, Jkmph = 8, 30, 35
@@ -91,7 +92,7 @@ class Ragna:
             elif self.state == 824 and self.frame == 6:
                 draw_rectangle(self.x-50,self.y, self.x+130,self.y+150)
 
-    def get_bb(self):
+    def A_get_bb(self):
         if self.see == 1:
             if self.state == 2 and self.frame == 2:
                 return(self.x + 100, self.y + 100, self.x + 210, self.y + 200)
