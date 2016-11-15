@@ -15,7 +15,14 @@ class stage:
         self.speed = [0,0,0,0,0,0,0,0,0,0]
         self.Playerx = 300
     def update(self,number):
-        if number== 1:
+        if number==0:
+            self.Dallnumber = 1
+            self.Playerx = 30
+            self.dall_HP = 1000
+            for i in range(self.Dallnumber):
+                self.dallx[i] = 700
+                self.speed[i] =  4
+        elif number== 1:
             self.Dallnumber=10
             self.Playerx = 300
             self.dall_HP = 1000
@@ -28,4 +35,4 @@ class stage:
             self.dall_HP = 3000
             for i in range(self.Dallnumber):
                 self.dallx[i] = 400+(100 * i)
-                self.speed[i] = (i % 5) + 4
+                self.speed[i] = (i+1 % 5) + 4
