@@ -393,8 +393,6 @@ class Ragna:
                 else:
                     LoadRe.rag.hit.clip_draw_to_origin((self.frame) * 400, 0, 400, 420, self.x , self.y, 200, 210)
 
-
-
             elif self.state== self.JUMP_UP:
                 if self.frame>6:
                     LoadRe.rag.jump_up.clip_draw_to_origin(2400,0,400,530, self.x-40,self.y, 200,265)
@@ -455,6 +453,14 @@ class Ragna:
                     LoadRe.rag.Rdash2.clip_draw_to_origin((self.frame-5) * 1000, 520, 1000, 520, self.x-30, self.y-20, 500, 260)
                 else:
                     LoadRe.rag.Rdash2.clip_draw_to_origin((self.frame-11) * 1000, 0, 1000, 520, self.x-30, self.y-20, 500, 260)
+
+            elif self.state == self.HIT:
+                if self.frame > 4:
+                    LoadRe.rag.Rhit.clip_draw_to_origin(1600, 0, 400, 420, self.x, self.y, 200, 210)
+                else:
+                    LoadRe.rag.Rhit.clip_draw_to_origin((self.frame) * 400, 0, 400, 420, self.x, self.y, 200, 210)
+
+
             elif self.state== self.JUMP_UP:
                 if self.frame>6:
                     LoadRe.rag.Rjump_up.clip_draw_to_origin(2400,0,400,530, self.x-40,self.y, 200,265)

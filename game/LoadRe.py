@@ -150,5 +150,6 @@ class Ragna_image:
         update_canvas()
 
         self.hit = load_image('resource/hit.png')
+        self.Rhit = load_image('resource/Rhit.png')
 
 
