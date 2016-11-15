@@ -1,6 +1,8 @@
 from pico2d import*
+
 class GameState:
     def __init__(self, state):
+
         self.enter = state.enter
         self.exit = state.exit
         self.pause = state.pause

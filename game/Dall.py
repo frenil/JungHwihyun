@@ -34,9 +34,12 @@ class dall:
         self.ishit = False
         self.next =0
         self.tmp =0
-
+        self.isP = False
         self.Wsp = Speed(self.Wkmph)
         self.Ysp = Speed(self.Yhkmph)
+        self.HP = 1000
+
+        self.font = load_font('ENCR10B.TTF',20)
 
     def get_Rect(self):
         if self.see == 1:
@@ -65,15 +68,14 @@ class dall:
         self.total_frames += self.FRAME_PER_ACTION * self.ACTION_PER_TIME * game_framework.frame_time
 
 
-        if self.x < 40:
-            self.x = 40
-        elif self.x > 1280 - 200:
-             self.x = 1280 - 200
+
         if self.state == 0:
             self.frame = int(self.total_frames)%15
-            if self.frame == 14:
+            self.x += self.see*self.Wsp
+            if self.frame == 14 and self.isP==True:
                 self.state= self.PUNCH
                 self.total_frames=0
+
         if self.state == 1:
             if self.frame<8:
                 self.frame = int(self.total_frames)
@@ -93,6 +95,8 @@ class dall:
                 self.state = 0
                 self.total_frames = 0
     def draw(self):
+        self.font.draw(self.x-10,self.y+250,'HP: %d'%self.HP,(255,255,255))
+
         if self.see == -1:
             if self.state == 0 or self.state ==8:
                 LoadRe.dall.Lstand.clip_draw_to_origin(self.frame * 350, 0, 350, 400, self.x, self.y, 175, 200)

@@ -41,11 +41,12 @@ class Ragna:
         self.walkframe= 0
         self.total_frames=0
         self.jump_act=0
-
+        self.HP = 3000
         self.Wsp = Speed(self.Wkmph)
         self.Dsp = Speed(self.Dkmph)
         self.Jsp = Speed(self.Jkmph)
         self.Ysp = Speed(self.Yhkmph)
+        self.font = load_font('ENCR10B.TTF',20)
     def get_Rect(self):
         if self.see == 1:
             if self.state == 2 and self.frame == 2:
@@ -344,6 +345,7 @@ class Ragna:
                 self.total_frames=0
                 self.next=0
     def draw(self):
+        self.font.draw(self.x-10,self.y+250,'HP: %d'%self.HP,(255,255,255))
         if self.see == -1:
             if self.state == self.STAND:
                 if self.frame < 7:

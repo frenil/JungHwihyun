@@ -8,7 +8,9 @@ import Dall
 import Player
 import game_framework
 import title_state
-
+import Stage_set
+import main_state_2
+import main_state
 
 
 name = "MainState"
@@ -27,22 +29,30 @@ class Back:
 
 
 def enter():
-    global back, player, dall
+    global back, player, dalls
     global LKeyco, RKeyco
     global count
     count=0
     RKeyco, LKeyco = 0, 0
-
+    stage = Stage_set.stage()
+    stage.update(1)
     back = Back()
     player = Player.Ragna()
-    dall = Dall.dall()
-
+    player.x = stage.Playerx
+    dalls = [Dall.dall() for i in range(10)]
+    j=0
+    for dall in dalls:
+        dall.x = stage.dallx[j]
+        dall.HP = stage.dall_HP
+        dall.Wsp = Dall.Speed(stage.speed[j])
+        j += 1
 
 def exit():
     global back, player, dall
     del(back)
     del(player)
-    del (dall)
+    for dall in dalls:
+        del (dall)
 
 
 def pause():
@@ -56,6 +66,7 @@ def resume():
 def handle_events():
     global LKeyco, RKeyco
     events = get_events()
+
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
@@ -71,6 +82,10 @@ def handle_events():
             elif event.key == SDLK_z :
                 player.state = player.HIT
                 player.total_frames = 0
+            elif event.key == SDLK_1:
+                game_framework.change_state(main_state)
+            elif event.key == SDLK_2:
+                game_framework.change_state(main_state_2)
 
             if event.key == SDLK_LEFT:
                 player.Ldown = True
@@ -103,38 +118,50 @@ def update():
     if player.Rdown == False:
         RKeyco = RKeyco + 1
     player.update()
-    dall.update()
-    if dall.x<player.x and dall.ishit==False:
-        dall.see=1
-    elif dall.x>=player.x and dall.ishit==False:
-        dall.see=-1
-    if collide(player.A_get_bb(),dall.H_get_bb()) == True:
-        dall.state  = 1
-        dall.total_frames=0
-        dall.frame=0
-        if player.state==4:
-            dall.hitxSp = 12
-            dall.hitySp=10
-        elif player.state==41:
-            dall.hitxSp = 7.5
-            dall.hitySp = 10
-        elif player.state== player.UPPER:
-            dall.hitxSp = 5
-            dall.hitySp = 13
-        elif player.state == 823:
-            dall.hitxSp = 5
-            dall.hitySp = -30
+    for dall in dalls:
+        dall.update()
+        if(player.x-dall.x)*(player.x-dall.x)<20000:
+            dall.isP=True
         else:
-            dall.hitxSp = 15
-            dall.hitySp=7
-        dall.see = player.see* -1
-        dall.ishit =True
-    if collide(player.H_get_bb(),dall.A_get_bb()) == True:
-        player.state = player.HIT
-        player.total_frames = 0
-        player.frame = 0
-        player.see = dall.see * -1
-
+            dall.isP = False
+        if dall.x<player.x and dall.ishit==False:
+            dall.see=1
+        elif dall.x>=player.x and dall.ishit==False:
+            dall.see=-1
+        if collide(player.A_get_bb(),dall.H_get_bb()) == True:
+            dall.state  = 1
+            dall.total_frames=0
+            dall.frame=0
+            if player.state==4:
+                dall.hitxSp = 25
+                dall.hitySp=5
+                dall.HP-=30
+            elif player.state==41:
+                dall.hitxSp = 10
+                dall.hitySp = 5
+                dall.HP-=20
+            elif player.state== player.UPPER:
+                dall.hitxSp = 5
+                dall.hitySp = 13
+                dall.HP -=15
+            elif player.state == 823:
+                dall.hitxSp = 5
+                dall.hitySp = -30
+                dall.HP -=20
+            else:
+                dall.hitxSp = 15
+                dall.hitySp=7
+                dall.HP -=50
+            dall.see = player.see* -1
+            dall.ishit =True
+        if collide(player.H_get_bb(),dall.A_get_bb()) == True:
+            player.state = player.HIT
+            player.total_frames = 0
+            player.frame = 0
+            player.see = dall.see * -1
+            player.HP -= 50
+        if dall.HP<=0 and dall.state==1 and dall.frame==7:
+            dalls.remove(dall)
 
 def collide(player,dall):
     left_a, bottom_a, right_a, top_a = player
@@ -149,10 +176,13 @@ def collide(player,dall):
 def draw():
    clear_canvas()
    back.draw()
-   dall.draw()
+
+   for dall in dalls:
+       dall.draw()
    player.draw()
    player.get_Rect()
-   dall.get_Rect()
+   for dall in dalls:
+       dall.get_Rect()
 
    update_canvas()
 
