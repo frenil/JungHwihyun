@@ -68,7 +68,7 @@ class Ragna:
                 draw_rectangle(self.x+70,self.y, self.x+250,self.y+200)
             elif self.state == 824 and self.frame == 6:
                 draw_rectangle(self.x+70,self.y, self.x+250,self.y+200)
-
+            draw_rectangle(self.x , self.y, self.x + 130, self.y + 200)
 
         elif self.see == -1:
             if self.state == 2 and self.frame == 2:
@@ -91,7 +91,7 @@ class Ragna:
                 draw_rectangle(self.x-50,self.y+50, self.x+130,self.y+200)
             elif self.state == 824 and self.frame == 6:
                 draw_rectangle(self.x-50,self.y, self.x+130,self.y+150)
-
+            draw_rectangle(self.x , self.y, self.x + 130, self.y + 200)
     def A_get_bb(self):
         if self.see == 1:
             if self.state == 2 and self.frame == 2:
@@ -135,6 +135,12 @@ class Ragna:
                 return(self.x-270,self.y+50, self.x-70,self.y+200)
             elif self.state == 824 and self.frame == 6:
                 return(self.x-50,self.y, self.x+130,self.y+150)
+        return(0,0,0,0)
+    def H_get_bb(self):
+        if self.see == 1:
+            return(self.x , self.y, self.x + 130, self.y + 200)
+        elif self.see == -1:
+            return(self.x , self.y, self.x + 130, self.y + 200)
         return(0,0,0,0)
     def update(self):
 
@@ -328,7 +334,7 @@ class Ragna:
             if self.frame<6 or self.frame>6:
                 self.frame =  int(self.total_frames)
             else:
-                self.x += self.see*Speed(10)
+                self.x += self.see*Speed(50)
                 self.y -= 60
             if self.y<=50:
                 self.frame = int(self.total_frames)

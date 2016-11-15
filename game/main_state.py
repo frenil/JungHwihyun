@@ -108,31 +108,37 @@ def update():
         dall.see=1
     elif dall.x>=player.x and dall.ishit==False:
         dall.see=-1
-    if collide(player,dall) == True:
+    if collide(player.A_get_bb(),dall.H_get_bb()) == True:
         dall.state  = 1
         dall.total_frames=0
         dall.frame=0
         if player.state==4:
-            dall.Xhit = 20
-            dall.Yhit=15
+            dall.hitxSp = 12
+            dall.hitySp=10
         elif player.state==41:
-            dall.Xhit = 10
-            dall.Yhit=15
-        elif player.state== 82:
-            dall.Xhit = 4
-            dall.Yhit = 30
+            dall.hitxSp = 7.5
+            dall.hitySp = 10
+        elif player.state== player.UPPER:
+            dall.hitxSp = 5
+            dall.hitySp = 13
         elif player.state == 823:
-            dall.Xhit = 4
-            dall.Yhit = -60
+            dall.hitxSp = 5
+            dall.hitySp = -30
         else:
-            dall.Xhit = 4
-            dall.Yhit=15
+            dall.hitxSp = 15
+            dall.hitySp=7
         dall.see = player.see* -1
         dall.ishit =True
+    if collide(player.H_get_bb(),dall.A_get_bb()) == True:
+        player.state = player.HIT
+        player.total_frames = 0
+        player.frame = 0
+        player.see = dall.see * -1
+
 
 def collide(player,dall):
-    left_a, bottom_a, right_a, top_a = player.A_get_bb()
-    left_b, bottom_b, right_b, top_b = dall.H_get_bb()
+    left_a, bottom_a, right_a, top_a = player
+    left_b, bottom_b, right_b, top_b = dall
     if left_a > right_b: return False
     if right_a < left_b: return False
     if top_a < bottom_b: return False

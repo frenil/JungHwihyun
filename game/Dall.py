@@ -15,7 +15,7 @@ def Speed(kmph):
 
 class dall:
     PUNCH =2
-    Wkmph, Xhkmph,Yhkmph = 4,9, 45
+    Wkmph, Xhkmph,Yhkmph = 4,9, 30
 
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
@@ -27,6 +27,8 @@ class dall:
         self.total_frames =0
         self.state =0
         self.see = -1
+        self.hitxSp =4
+        self.hitySp =4
         self.Yhit = 20
         self.Xhit = 4
         self.ishit = False
@@ -37,11 +39,25 @@ class dall:
         self.Ysp = Speed(self.Yhkmph)
 
     def get_Rect(self):
-
         if self.see == 1:
+            if self.state == self.PUNCH and self.frame == 8:
+                draw_rectangle(self.x + (self.see * 70), self.y, self.x + 250, self.y + 200)
+
             draw_rectangle(self.x,self.y, self.x+175,self.y+200)
         elif self.see == -1:
+            if self.state==self.PUNCH and self.frame==8:
+                draw_rectangle(self.x+(self.see*70), self.y, self.x + 100, self.y + 200)
             draw_rectangle(self.x,self.y, self.x+175,self.y+200)
+    def A_get_bb(self):
+        if self.state==self.PUNCH and self.frame==8:
+            if self.see ==1:
+                return (self.x+(self.see*70), self.y, self.x + 250, self.y + 200)
+            if self.see == -1:
+                return (self.x+(self.see*70), self.y, self.x + 100, self.y + 200)
+
+        return (0,0,0,0)
+
+
     def H_get_bb(self):
         return (self.x,self.y, self.x+175,self.y+200)
 
@@ -63,8 +79,8 @@ class dall:
                 self.frame = int(self.total_frames)
             else:
                 self.frame = 8
-            self.x += -0.5*(self.see*self.Wsp)
-            self.y += (self.Ysp/2) -Speed(int(self.total_frames)*4)
+            self.x += -0.5*(self.see*Speed(self.hitxSp))
+            self.y += (self.hitySp) -Speed(int(self.total_frames)*3)
             if self.y<=50:
                 self.y=50
                 self.state=0
