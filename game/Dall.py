@@ -15,7 +15,7 @@ def Speed(kmph):
 
 class dall:
     PUNCH =2
-    Wkmph, Xhkmph,Yhkmph = 4,9, 30
+    Wkmph, Xhkmph,Yhkmph = 4,5, 30
 
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
@@ -71,6 +71,7 @@ class dall:
 
         if self.state == 0:
             self.frame = int(self.total_frames)%15
+
             self.x += self.see*self.Wsp
             if self.frame == 14 and self.isP==True:
                 self.state= self.PUNCH
