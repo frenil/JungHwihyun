@@ -11,6 +11,7 @@ def Loading():
     image = load_image('title.png')
     rag = Ragna_image()
     dall = Dall_image()
+    dall.Image_load(image,font)
     rag.Image_load(image,font)
 class Dall_image:
     def __init__(self):
