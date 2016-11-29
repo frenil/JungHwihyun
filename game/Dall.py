@@ -15,7 +15,7 @@ def Speed(kmph):
 
 class dall:
     PUNCH =2
-    Wkmph, Xhkmph,Yhkmph = 4,5, 30
+    Wkmph, Xhkmph,Yhkmph = 5,5, 30
 
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
