@@ -1,18 +1,29 @@
 from pico2d import *
 
 rag = None
+back = None
+dall = None
 LoadCount =0
 
 def Loading():
     global rag
-    global dall
+    global dall, back
     global font
     font = load_font('ENCR10B.TTF', 100)
     image = load_image('title.png')
+
     rag = Ragna_image()
     dall = Dall_image()
+    back = Back_image()
+
+    back.Image_load()
     dall.Image_load(image,font)
     rag.Image_load(image,font)
+class Back_image:
+    def __init__(self):
+        pass
+    def Image_load(self):
+        self.back_1 = load_image('back.png')
 class Dall_image:
     def __init__(self):
         pass

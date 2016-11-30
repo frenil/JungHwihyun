@@ -12,6 +12,7 @@ import Stage_set
 import main_state_2
 import main_state
 import tutorial_state
+import background
 
 name = "MainState"
 
@@ -36,7 +37,7 @@ def enter():
     RKeyco, LKeyco = 0, 0
     stage = Stage_set.stage()
     stage.update(0)
-    back = Back()
+    back = background.Background()
     player = Player.Ragna()
     player.x = stage.Playerx
     dalls = [Dall.dall() for i in range(1)]
