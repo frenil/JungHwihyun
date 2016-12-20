@@ -1,5 +1,7 @@
 import game_framework
 import main_state
+import title_state
+import LoadRe
 from pico2d import *
 
 name = "TitleState"
@@ -7,16 +9,10 @@ image = None
 
 
 def enter():
-    global image,font
-    image = load_image('title.png')
-    font = load_font('ENCR10B.TTF', 50)
-
+    pass
 
 def exit():
-    global image,font
-    del(image)
-    del(font)
-
+    pass
 def handle_events():
     events = get_events()
     for event in events:
@@ -26,13 +22,11 @@ def handle_events():
             if (event.type, event.key)== (SDL_KEYDOWN,SDLK_ESCAPE):
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN,SDLK_SPACE ):
-                game_framework.change_state(main_state)
+                game_framework.change_state(title_state)
 
 def draw():
     clear_canvas()
-    image.draw(640,360)
-    font.draw(340,150,"press space to start",(255,0,0))
-    font.draw(400,100,"press i to help",(255,0,0))
+    LoadRe.back.rank.clip_draw_to_origin(0, 0, 1280, 720, 0, 0)
     update_canvas()
 
 
@@ -46,9 +40,3 @@ def pause():
 
 def resume():
     pass
-
-
-
-
-
-

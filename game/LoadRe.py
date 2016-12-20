@@ -10,7 +10,7 @@ def Loading():
     global dall, back
     global font
     font = load_font('ENCR10B.TTF', 100)
-    image = load_image('title.png')
+    image = load_image('resource/warp_small.png')
 
     rag = Ragna_image()
     dall = Dall_image()
@@ -24,6 +24,8 @@ class Back_image:
         pass
     def Image_load(self):
         self.back_1 = load_image('back.png')
+        self.Game_over = load_image('resource/gameover.png')
+        self.rank = load_image('resource/Rankback.png')
 class Dall_image:
     def __init__(self):
         pass

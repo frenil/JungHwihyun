@@ -1,21 +1,20 @@
 import game_framework
-import main_state
+import Ranking_state
+import LoadRe
 from pico2d import *
 
 name = "TitleState"
 image = None
-
+overcount=0
 
 def enter():
-    global image,font
-    image = load_image('title.png')
-    font = load_font('ENCR10B.TTF', 50)
-
+    global image
+    global overcount
+    overcount = 0
 
 def exit():
-    global image,font
+    global image
     del(image)
-    del(font)
 
 def handle_events():
     events = get_events()
@@ -25,19 +24,18 @@ def handle_events():
         else:
             if (event.type, event.key)== (SDL_KEYDOWN,SDLK_ESCAPE):
                 game_framework.quit()
-            elif (event.type, event.key) == (SDL_KEYDOWN,SDLK_SPACE ):
-                game_framework.change_state(main_state)
 
 def draw():
     clear_canvas()
-    image.draw(640,360)
-    font.draw(340,150,"press space to start",(255,0,0))
-    font.draw(400,100,"press i to help",(255,0,0))
+    LoadRe.back.Game_over.clip_draw_to_origin(0, 0, 1280, 720, 0, 0)
     update_canvas()
 
 
 def update():
-    pass
+    global overcount
+    overcount+=1
+    if 50<overcount:
+        game_framework.change_state(Ranking_state)
 
 
 def pause():

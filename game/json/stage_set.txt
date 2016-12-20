@@ -1,0 +1,4 @@
+{
+	"stage_1":{"dalls":1,"hp":500,"x":800,"distance":0,"speed":5}
+	"stage_2":{"dalls":7,"hp":500,"x":400,"distance":50,"speed":5}
+}

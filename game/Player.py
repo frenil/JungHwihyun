@@ -26,7 +26,7 @@ class Ragna:
 
 
     def __init__(self):
-        self.x,self.y = 300,50
+        self.x,self.y = 100,50
         self.Ldown,self.Rdown = False,False
         self.Ldouble, self.Rdouble = False, False
         self.jumpdo = False
@@ -217,11 +217,8 @@ class Ragna:
                 self.state = self.JUMP_UP
                 self.next = 0
                 self.total_frames =0
-
-            self.walkframe =(self.walkframe+1)%5
-            if self.walkframe == 1:
-                self.frame =  int(self.total_frames) % 9
-
+            self.frame =  int(self.total_frames)
+            self.frame=self.frame%9
             self.x += self.see*self.Wsp
             if self.walking == False:
                 self.walkframe = 0

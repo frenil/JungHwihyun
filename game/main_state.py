@@ -9,39 +9,49 @@ import Player
 import game_framework
 import title_state
 import background
-import Stage_set
-import main_state_2
-import main_state
+import LoadStage
+import gameover_state
 
 
 name = "MainState"
-
+dalls = None
 font = None
-
-
+stage=0
+dallcount=0
+remain_dall = 0
+playTime=0
+TIME_PER_FRAME = 1.0
 
 def enter():
     global back, player, dalls
     global LKeyco, RKeyco
-    global count
+    global dallcount, count, remain_dall
+    global stage, stage_set
+    global font, playTime
+    playTime=0
+    font = load_font('ENCR10B.TTF', 70)
+    stage=0
+    stage_set = LoadStage.Stage()
+    dallcount= stage_set.Getdallcount(stage)
+    remain_dall = dallcount
     count=0
     RKeyco, LKeyco = 0, 0
-    stage = Stage_set.stage()
-    stage.update(1)
     back = background.Background()
     player = Player.Ragna()
-    player.x = stage.Playerx
-    dalls = [Dall.dall() for i in range(10)]
+    player.x = 300
+    dalls = [Dall.dall() for i in range(dallcount)]
     j=0
+    print(dallcount)
     for dall in dalls:
-        dall.x = stage.dallx[j]
-        dall.HP = stage.dall_HP
-        dall.Wsp = Dall.Speed(stage.speed[j])
+        stage_set.SetStage(j,stage,dall)
         j += 1
 
 def exit():
-    global back, player, dall
+    global back, player, dall, dallcount, stage_set,stage
+    del(stage)
+    del(stage_set)
     del(back)
+    del(dallcount)
     del(player)
     for dall in dalls:
         del (dall)
@@ -57,6 +67,8 @@ def resume():
 
 def handle_events():
     global LKeyco, RKeyco
+    global stage
+    global dalls, remain_dall
     events = get_events()
 
     for event in events:
@@ -71,13 +83,28 @@ def handle_events():
                 running = False
             elif event.key == SDLK_a :
                 player.next = 1
-            elif event.key == SDLK_z :
-                player.state = player.HIT
-                player.total_frames = 0
-            elif event.key == SDLK_1:
-                game_framework.change_state(main_state)
-            elif event.key == SDLK_2:
-                game_framework.change_state(main_state_2)
+            elif event.key == SDLK_DOWN :
+                print('down')
+                print(remain_dall)
+                if player.x>700 and remain_dall==0:
+                    print('succece')
+                    player.x = 100
+                    stage += 1
+                    if stage > 2:
+                        game_framework.change_state(gameover_state)
+
+                    else:
+                        dallcount = stage_set.Getdallcount(stage)
+                        remain_dall = dallcount
+                        print('remain')
+                        print(remain_dall)
+                        newDalls = [Dall.dall() for i in range(dallcount)]
+                        dalls = dalls+newDalls
+                        j = 0
+                        print(dallcount)
+                        for dall in dalls:
+                            stage_set.SetStage(j, stage, dall)
+                            j += 1
 
             if event.key == SDLK_LEFT:
                 player.Ldown = True
@@ -105,6 +132,9 @@ def handle_events():
 def update():
     global LKeyco, RKeyco
     global count
+    global dalls,remain_dall
+    global playTime
+    playTime += TIME_PER_FRAME * game_framework.frame_time
     if player.Ldown == False:
         LKeyco = LKeyco + 1
     if player.Rdown == False:
@@ -112,8 +142,9 @@ def update():
     player.update()
     for dall in dalls:
         dall.update()
-        if(player.x-dall.x)*(player.x-dall.x)<20000:
-            dall.isP=True
+        if math.sqrt(math.pow((player.x-dall.x),2))<200 and dall.state==0:
+            dall.state=2
+            dall.total_frames=0
         else:
             dall.isP = False
         if dall.x<player.x and dall.ishit==False:
@@ -152,8 +183,9 @@ def update():
             player.frame = 0
             player.see = dall.see * -1
             player.HP -= 50
-        if dall.HP<=0 and dall.state==1 and dall.frame==7:
+        if dall.HP<=0 and dall.y<52:
             dalls.remove(dall)
+            remain_dall-=1
 
 def collide(player,dall):
     left_a, bottom_a, right_a, top_a = player
@@ -166,8 +198,10 @@ def collide(player,dall):
     return True
 
 def draw():
+   global playTime, font
    clear_canvas()
    back.draw()
+   font.draw(600, 650, "%.1f"  % playTime, (225, 0,0))
 
    for dall in dalls:
        dall.draw()
