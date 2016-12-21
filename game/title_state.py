@@ -1,5 +1,8 @@
 import game_framework
 import main_state
+import Ranking_state
+import help_state
+import LoadRe
 from pico2d import *
 
 name = "TitleState"
@@ -7,15 +10,18 @@ image = None
 
 
 def enter():
-    global image,font
+    global image,font, music
+    music = LoadRe.sound.title_bgm
     image = load_image('title.png')
     font = load_font('ENCR10B.TTF', 50)
-
+    music.repeat_play()
 
 def exit():
-    global image,font
+    global image,font, music
+    music.stop()
     del(image)
     del(font)
+    del(music)
 
 def handle_events():
     events = get_events()
@@ -27,6 +33,8 @@ def handle_events():
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN,SDLK_SPACE ):
                 game_framework.change_state(main_state)
+            elif (event.type, event.key) == (SDL_KEYDOWN,SDLK_i ):
+                game_framework.change_state(help_state)
 
 def draw():
     clear_canvas()

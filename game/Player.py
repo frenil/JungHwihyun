@@ -30,6 +30,7 @@ class Ragna:
         self.Ldown,self.Rdown = False,False
         self.Ldouble, self.Rdouble = False, False
         self.jumpdo = False
+        self.isSmash = False
         self.frame =0
         self.state =0
         self.st2co=0
@@ -252,7 +253,10 @@ class Ragna:
                 self.next = 0
         elif self.state == self.HIT:
             self.frame = int(self.total_frames)
-            self.x += -0.5*(self.see*self.Wsp)
+            if self.isSmash ==False:
+                self.x += -0.5*(self.see*self.Wsp)
+            else:
+                self.x += -10 * (self.see * self.Wsp)
             self.y += (self.Ysp/2) -Speed(self.frame*5)
 
             if self.y <=50:

@@ -12,11 +12,11 @@ def Speed(kmph):
 
 class Stage:
     def __init__(self):
-        self.dalls=[1,7,4]
-        self.hp = [1000,1000,3000]
-        self.x = [800,400,400]
-        self.distance = [0,100,300]
-        self.speed = [5,5,10]
+        self.dalls=[1,7,4,-1]
+        self.hp = [1000,1000,2000,5000]
+        self.x = [800,400,400,600]
+        self.distance = [0,100,300,0]
+        self.speed = [5,5,10,3]
 
     def Getdallcount(self,stage):
         return self.dalls[stage]

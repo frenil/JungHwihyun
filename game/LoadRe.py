@@ -8,24 +8,37 @@ LoadCount =0
 def Loading():
     global rag
     global dall, back
-    global font
+    global font, sound
     font = load_font('ENCR10B.TTF', 100)
     image = load_image('resource/warp_small.png')
-
+    sound = Sound()
     rag = Ragna_image()
     dall = Dall_image()
     back = Back_image()
-
+    sound.sound_load()
     back.Image_load()
     dall.Image_load(image,font)
     rag.Image_load(image,font)
+class Sound:
+    def __init__(self):
+        pass
+    def sound_load(self):
+        self.title_bgm = load_music('sound/title_music.mp3')
+        self.title_bgm.set_volume(64)
+        self.play_bgm = load_music('sound/play_music.mp3')
+        self.play_bgm.set_volume(64)
+        self.hit_sound = load_wav('sound/hit_effect.wav')
+        self.hit_sound.set_volume(64)
 class Back_image:
     def __init__(self):
         pass
     def Image_load(self):
         self.back_1 = load_image('back.png')
+        self.back_2 = load_image('resource/back_2.png')
+        self.help_back = load_image('resource/help.png')
         self.Game_over = load_image('resource/gameover.png')
-        self.rank = load_image('resource/Rankback.png')
+        self.rank = load_image('resource/rank_back.png')
+        self.tier = load_image('resource/Tier.png')
 class Dall_image:
     def __init__(self):
         pass
@@ -34,6 +47,8 @@ class Dall_image:
         clear_canvas()
         self.Lstand = load_image('resource/dallstand.png')
         self.Rstand = load_image('resource/Rdallstand.png')
+        self.spin = load_image('resource/spin.png')
+        self.Rspin = load_image('resource/Rspin.png')
         LoadCount +=1
         image.draw_now(640, 360)
         font.draw(300,100,"Loading  %d"%LoadCount,(225,225,225))

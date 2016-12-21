@@ -1,14 +1,15 @@
 import random
-import json
 import os
 
 from pico2d import *
 
 import Dall
+import json
 import Player
 import game_framework
 import title_state
 import background
+import LoadRe
 import LoadStage
 import gameover_state
 
@@ -16,10 +17,11 @@ import gameover_state
 name = "MainState"
 dalls = None
 font = None
-stage=0
+stage=2
 dallcount=0
-remain_dall = 0
+remain_dall =0
 playTime=0
+total_point =0
 TIME_PER_FRAME = 1.0
 
 def enter():
@@ -28,7 +30,13 @@ def enter():
     global dallcount, count, remain_dall
     global stage, stage_set
     global font, playTime
+    global totalpoint
+    global music, hit_S
+    music = LoadRe.sound.play_bgm
+    music.repeat_play()
+    hit_S = LoadRe.sound.hit_sound
     playTime=0
+    totalpoint=0
     font = load_font('ENCR10B.TTF', 70)
     stage=0
     stage_set = LoadStage.Stage()
@@ -66,8 +74,8 @@ def resume():
 
 
 def handle_events():
-    global LKeyco, RKeyco
-    global stage
+    global LKeyco, RKeyco, music
+    global stage, player, totalpoint
     global dalls, remain_dall
     events = get_events()
 
@@ -83,6 +91,7 @@ def handle_events():
                 running = False
             elif event.key == SDLK_a :
                 player.next = 1
+
             elif event.key == SDLK_DOWN :
                 print('down')
                 print(remain_dall)
@@ -90,7 +99,9 @@ def handle_events():
                     print('succece')
                     player.x = 100
                     stage += 1
-                    if stage > 2:
+                    if stage > 3:
+                        totalpoint = (player.HP)-(playTime*10)
+                        music.stop()
                         game_framework.change_state(gameover_state)
 
                     else:
@@ -98,7 +109,11 @@ def handle_events():
                         remain_dall = dallcount
                         print('remain')
                         print(remain_dall)
-                        newDalls = [Dall.dall() for i in range(dallcount)]
+                        if dallcount==-1:
+                            remain_dall =1
+                            newDalls = [Dall.Bigdall()]
+                        else:
+                            newDalls = [Dall.dall() for i in range(dallcount)]
                         dalls = dalls+newDalls
                         j = 0
                         print(dallcount)
@@ -133,7 +148,7 @@ def update():
     global LKeyco, RKeyco
     global count
     global dalls,remain_dall
-    global playTime
+    global playTime, hit_S
     playTime += TIME_PER_FRAME * game_framework.frame_time
     if player.Ldown == False:
         LKeyco = LKeyco + 1
@@ -142,8 +157,21 @@ def update():
     player.update()
     for dall in dalls:
         dall.update()
-        if math.sqrt(math.pow((player.x-dall.x),2))<200 and dall.state==0:
-            dall.state=2
+        if math.sqrt(math.pow((player.x-dall.x),2))<200 and dall.state==0 and dall.frame>5:
+            if stage==3:
+                i=100*random.random()
+                if i%10>=0 and i%10<=1:
+                    dall.state=3
+                elif i%10>=2 and i%10<=5:
+                    dall.state=2
+                else:
+                    dall.state=0
+            else:
+                i=random.random()
+                if i%10<=5:
+                    dall.state=2
+                else:
+                    dall.state=0
             dall.total_frames=0
         else:
             dall.isP = False
@@ -152,10 +180,8 @@ def update():
         elif dall.x>=player.x and dall.ishit==False:
             dall.see=-1
         if collide(player.A_get_bb(),dall.H_get_bb()) == True:
-            dall.state  = 1
-            dall.total_frames=0
-            dall.frame=0
             if player.state==4:
+                hit_S.play()
                 dall.hitxSp = 25
                 dall.hitySp=5
                 dall.HP-=30
@@ -172,18 +198,28 @@ def update():
                 dall.hitySp = -30
                 dall.HP -=20
             else:
+                hit_S.play()
                 dall.hitxSp = 15
                 dall.hitySp=7
                 dall.HP -=50
-            dall.see = player.see* -1
-            dall.ishit =True
+            if stage!=3 or (stage==3 and dall.state !=3 and dall.frame>=5):
+                dall.state = 1
+                dall.total_frames = 0
+                dall.frame = 0
+                dall.see = player.see* -1
+                dall.ishit =True
         if collide(player.H_get_bb(),dall.A_get_bb()) == True:
             player.state = player.HIT
             player.total_frames = 0
             player.frame = 0
             player.see = dall.see * -1
-            player.HP -= 50
-        if dall.HP<=0 and dall.y<52:
+            if dall.state==3:
+                player.isSmash = True
+                player.HP -=100
+            else:
+                player.isSmash = False
+                player.HP -= 50
+        if dall.HP<=0 and dall.y<55:
             dalls.remove(dall)
             remain_dall-=1
 
